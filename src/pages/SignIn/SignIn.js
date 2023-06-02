@@ -20,9 +20,11 @@ export default function SignIn() {
 
   useEffect(() => {
     if (localStorage.length !== 0) {
-      navigate('/timeline')
+      navigate('/timeline');
+      
     }
-  }, [navigate])
+  }, [navigate]);
+
 
   async function login(e) {
     e.preventDefault()

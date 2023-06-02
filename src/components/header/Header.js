@@ -15,10 +15,9 @@ export default function Header() {
     setAvatar(avatarFromLocalStorage);
     setName(nameFromLocalStorage)
 
-  }, []);
+  },);
   
 
-  const { user } = useContext(UserContext1);
   
 
 
@@ -26,22 +25,17 @@ export default function Header() {
 
   const handleUserClick = () => {
     const token = localStorage.getItem("token");
-    console.log("aqq")
-    console.log(token);
-    console.log(localStorage);
-    console.log(avatar)
-
-
     if (token) {
       const confirmLogout = window.confirm("Deseja sair da conta?");
 
       if (confirmLogout) {
         localStorage.removeItem("token");
         localStorage.clear();
-        window.location.href = "/";
+        navigate("/")
+        
       }
     } else {
-      window.location.href = "/";
+      navigate("/")
     }
   };
 
