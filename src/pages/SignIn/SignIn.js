@@ -99,7 +99,7 @@ export default function SignIn() {
             /> : "Log In"}
           </button>
         </form>
-        <p onClick={() => navigate('/sign-up')}>First time? Create an account!</p>
+        <p data-test="sign-up-link" onClick={() => navigate('/sign-up')}>First time? Create an account!</p>
       </Right>
     </ContainerSign>
 
