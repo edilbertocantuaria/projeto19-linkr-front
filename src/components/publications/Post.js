@@ -14,11 +14,26 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 export default function Post({ post, isFilled, likesCount, handleLike, postId, TL }) {
+
+    const navigate = useNavigate()
+
     const handleDataStyleClick = () => {
         window.open(post.link, '_blank');
     };
 
-    const navigate = useNavigate()
+    const getUserPage = async (e) => {
+        e.preventDefault();
+        const username = e.currentTarget.textContent;
+
+        try {
+            const users = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
+            const user = users.data.find(u => u.username === username);
+            navigate(`/user/${user.id}`);
+        } catch (err) {
+            console.log(err)
+            alert(err.response.data.message);
+        }
+    }
 
     useEffect(() => {
         if (TL) {
@@ -60,7 +75,9 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </p>
             </UserContainer>
             <ContentContainer>
-                <h3 data-test="username">Bob Esponja</h3>
+
+                <h3 data-test="username" onClick={getUserPage}>Bernardo</h3>
+
 
                 <p>
                     {post.article ? (

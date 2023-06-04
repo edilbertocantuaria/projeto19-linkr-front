@@ -29,7 +29,7 @@ export default function SignUp() {
       await axios.post(URL, body)
       navigate('/')
     } catch (err) {
-      alert(err.response.data)
+      alert(err.response.data.message)
     } finally {
       setIsClicked(false)
     }
@@ -44,6 +44,7 @@ export default function SignUp() {
             placeholder="e-mail"
             data-test="email"
             type="email"
+            autoComplete="current-email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={isClicked}
@@ -53,6 +54,7 @@ export default function SignUp() {
             placeholder="password"
             data-test="password"
             type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={isClicked}
@@ -62,6 +64,7 @@ export default function SignUp() {
             placeholder="username"
             data-test="username"
             type="text"
+            autoComplete="on"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             disabled={isClicked}
@@ -69,6 +72,7 @@ export default function SignUp() {
           />
           <input
             placeholder="picture perfil url"
+            data-test="picture-url"
             type="url"
             value={image}
             autoComplete="on"

@@ -10,6 +10,7 @@
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "react": "^18.2.0",
+    "react-debounce-input": "^3.3.0",
     "react-dom": "^18.2.0",
     "react-hashtag": "^2.1.2",
     "react-icons": "^4.9.0",

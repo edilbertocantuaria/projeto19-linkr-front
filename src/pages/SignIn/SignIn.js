@@ -20,9 +20,11 @@ export default function SignIn() {
 
   useEffect(() => {
     if (localStorage.length !== 0) {
-      navigate('/timeline')
+      navigate('/timeline');
+      
     }
-  }, [navigate])
+  }, [navigate]);
+
 
   async function login(e) {
     e.preventDefault()
@@ -97,7 +99,7 @@ export default function SignIn() {
             /> : "Log In"}
           </button>
         </form>
-        <p onClick={() => navigate('/sign-up')}>First time? Create an account!</p>
+        <p data-test="sign-up-link" onClick={() => navigate('/sign-up')}>First time? Create an account!</p>
       </Right>
     </ContainerSign>
 
