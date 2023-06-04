@@ -79,7 +79,7 @@ export const ContentContainer = styled.div`
     line-height: 20px;
   }
   span{
-    color: green;
+    color: white;
   }
 
 `;
