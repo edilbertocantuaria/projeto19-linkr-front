@@ -115,8 +115,7 @@ export default function TimelinePage() {
               post={post}
               isFilled={isFilled}
               likesCount={likesCount}
-              handleLike={
-                handleLike}
+              handleLike={handleLike}
             />
           ))
         ) : (
