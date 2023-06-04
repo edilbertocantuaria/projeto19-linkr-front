@@ -21,6 +21,7 @@ export default function TimelinePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleForm = (e) => {
+    console.log(e.target.value)
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
