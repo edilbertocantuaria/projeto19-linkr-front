@@ -1,5 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { BsPencil } from 'react-icons/bs';
+import { BiTrash } from "react-icons/bi"
 import { Link } from 'react-router-dom';
 
 export const heartBeatAnimation = keyframes`
@@ -62,8 +64,25 @@ export const StyledHeartIcon = styled(({ isfilled, ...props }) =>
     ease-in-out;
 `;
 
+export const EditPost = styled(BsPencil)`
+font-size: 16px;
+cursor: pointer;
+color: #FFFFFF;
+margin-right: 10px;
+
+`;
+
+export const DeletePost = styled(BiTrash)`
+font-size: 16px;
+cursor: pointer;
+color: #FFF;
+
+`;
+
 export const ContentContainer = styled.div`
+
   display: flex;
+  width: 100%;
   flex-direction: column;
   font-family: 'Lato';
   font-weight: 400;
@@ -73,8 +92,16 @@ export const ContentContainer = styled.div`
   h3 {
     font-size: 19px;
     line-height: 23px;
+
+    display: flex;
+    align-items: center;
+      .editANDdelete{
+        margin-left: auto;
+      }
+
   }
   p {
+    background-color: yellow;
     font-size: 17px;
     line-height: 20px;
   }
@@ -85,6 +112,9 @@ export const ContentContainer = styled.div`
 `;
 
 export const DataStyle = styled(Link)`
+
+width: 100%;
+
     display: flex;
     img{
         width: 30%;
@@ -99,6 +129,7 @@ export const DataStyle = styled(Link)`
     }
 `;
 export const DataText = styled.div`
+
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -106,8 +137,10 @@ export const DataText = styled.div`
     padding: 17px;
     border: 1px solid gray;
     border-right: none;
-    border-radius: 10px 0px 0px 11px;
+    border-radius: 10px 10px 10px 10px;
     p{
+
+
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;

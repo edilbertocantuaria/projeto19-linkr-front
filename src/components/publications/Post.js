@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
 import linkrLogo from '../../assets/linkrLogo.png';
 import ReactHashtag from "react-hashtag"
+import { useState } from 'react';
+
 import {
     ContentContainer,
     PostContainer,
     UserImage,
     StyledHeartIcon,
+    EditPost,
+    DeletePost,
     UserContainer,
     DataStyle,
     DataText
@@ -20,6 +24,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
     const navigate = useNavigate()
 
+    const [ableToEdit, setAbleToEdit] = useState (false)
+
     useEffect(() => {
         if (TL) {
             if (post.article) {
@@ -33,8 +39,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                                     "postId": postId,
                                     "hashtag": postComHashtag[i]
                                 })
-                                .then(res=>console.log(res.data))
-                                .catch(err=>console.log(err.message))
+                                    .then(res => console.log(res.data))
+                                    .catch(err => console.log(err.message))
                             }
                         };
                         addHashtags();
@@ -43,6 +49,22 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
             }
         }
     }, [])
+
+    function editPost(post) {
+        console.log("clicando para editar post");
+        //IMPLEMENTAR AS REQUISIÇÕES AQUI
+        console.log(post)
+    }
+
+
+    function deletePost(post) {
+        console.log("clicando para excluir post");
+        //IMPLEMENTAR AS REQUISIÇÕES AQUI
+
+
+    }
+
+
     return (
         <PostContainer>
             <UserContainer>
@@ -56,7 +78,19 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </p>
             </UserContainer>
             <ContentContainer>
-                <h3>Bob Esponja</h3>
+                <h3>Bob Esponja
+
+                    <div className='editANDdelete'>
+                        <EditPost
+                            onClick={() => editPost(this)}
+                            data-test="edit-btn"
+                        />
+                        <DeletePost
+                            onClick={() => deletePost(this)} 
+                            data-test="delete-btn"/>
+                            
+                    </div>
+                </h3>
 
                 <p>
                     {post.article ? (
@@ -72,7 +106,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                         <p>{post.description}</p>
                         <p>{post.link}</p>
                     </DataText>
-                    <img src={post.image ? post.image : linkrLogo} />
+
                 </DataStyle>
             </ContentContainer>
         </PostContainer>
