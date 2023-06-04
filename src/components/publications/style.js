@@ -79,6 +79,19 @@ color: #FFF;
 
 `;
 
+export const EditingPost = styled.textarea`
+background-color: #FFFFFF;
+color: #4C4C4C;
+border-radius: 7px;
+padding: 5px;
+width: 100%;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+
+`
+
 export const ContentContainer = styled.div`
 
   display: flex;
@@ -101,9 +114,14 @@ export const ContentContainer = styled.div`
 
   }
   p {
-    background-color: yellow;
+    background-color: brown;
     font-size: 17px;
     line-height: 20px;
+
+    .editingPost {
+        border-radius: 10px;
+        background-color: pink;
+    }
   }
   span{
     color: green;

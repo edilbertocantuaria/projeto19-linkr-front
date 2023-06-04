@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import linkrLogo from '../../assets/linkrLogo.png';
 import ReactHashtag from "react-hashtag"
 import { useState } from 'react';
@@ -12,7 +12,8 @@ import {
     DeletePost,
     UserContainer,
     DataStyle,
-    DataText
+    DataText,
+    EditingPost
 } from './style';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +25,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
     const navigate = useNavigate()
 
-    const [ableToEdit, setAbleToEdit] = useState (false)
+    const [ableToEdit, setAbleToEdit] = useState(false)
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         if (TL) {
@@ -50,16 +52,34 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         }
     }, [])
 
+
+    const editingPostRef = useRef(null);
     function editPost(post) {
+
+        if (ableToEdit) return setAbleToEdit(false);
+
         console.log("clicando para editar post");
         //IMPLEMENTAR AS REQUISIÇÕES AQUI
         console.log(post)
+        setAbleToEdit(true);
     }
+
+    const saveChanges = () => {
+        setSaving(true);
+      
+        //IMPLEMENTAR AS REQUISIÇÕES AQUI
+      
+
+        setAbleToEdit(false); 
+        setSaving(false); 
+      };
 
 
     function deletePost(post) {
         console.log("clicando para excluir post");
         //IMPLEMENTAR AS REQUISIÇÕES AQUI
+
+        console.log(post)
 
 
     }
@@ -82,22 +102,40 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
                     <div className='editANDdelete'>
                         <EditPost
-                            onClick={() => editPost(this)}
+                            onClick={() => editPost(post)}
                             data-test="edit-btn"
                         />
                         <DeletePost
-                            onClick={() => deletePost(this)} 
-                            data-test="delete-btn"/>
-                            
+                            onClick={() => deletePost(post)}
+                            data-test="delete-btn" />
+
                     </div>
                 </h3>
 
                 <p>
-                    {post.article ? (
+                    {post.article && !(ableToEdit) ? (
                         <ReactHashtag onHashtagClick={val => navigate(`/hashtag/${val.split('#')[1]}`)}>
                             {post.article}
                         </ReactHashtag>
                     ) : ""}
+                    {ableToEdit ? (
+                        <EditingPost
+                            defaultValue={post.article}
+                            autoFocus
+                            ref={editingPostRef}
+                            onClick={() => setAbleToEdit(false)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Escape') {
+                                    setAbleToEdit(false);
+                                } else if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    saveChanges();
+                                }
+                            }}
+                            disabled={saving}
+                        />
+                    ) : ""}
+
 
                 </p>
                 <DataStyle onClick={handleDataStyleClick}>
