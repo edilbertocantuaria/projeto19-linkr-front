@@ -22,6 +22,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   padding-bottom: 40px;
+  margin-top: 72px;
 `;
 
 export const TimelineContainer = styled.div`

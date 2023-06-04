@@ -2,6 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
+
 export const heartBeatAnimation = keyframes`
   0% {
     transform: scale(1);
@@ -73,6 +74,11 @@ export const ContentContainer = styled.div`
   h3 {
     font-size: 19px;
     line-height: 23px;
+    transition:  all 1s ease;
+  }
+  h3:hover {
+    cursor: pointer;
+    filter: brightness(70%);
   }
   p {
     font-size: 17px;

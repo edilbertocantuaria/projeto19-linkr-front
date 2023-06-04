@@ -8,6 +8,7 @@ import HashtagPage from "./pages/Hashtag/HashtagPage.js";
 import Provider from "./contexts/all.provider.js";
 import UserContext1 from "./contexts/use.context.js";
 import React, { useState } from "react";
+import UserPage from "./pages/User/UserPage.js";
 
 export default function App() {
   const [user, setUser] = useState("");
@@ -27,6 +28,10 @@ export default function App() {
               <Route
                 path="/hashtag/:hashtag"
                 element={<HeaderRoute><HashtagPage /></HeaderRoute>}
+              />
+              <Route
+              path="/user/:id"
+              element={<HeaderRoute><UserPage/></HeaderRoute>}
               />
             </Routes>
           </BrowserRouter>
