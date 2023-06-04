@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import linkrLogo from '../../assets/linkrLogo.png';
-import ReactHashtag from "react-hashtag"
+import ReactHashtag from 'react-hashtag';
 import {
     ContentContainer,
     PostContainer,
@@ -12,10 +12,12 @@ import {
 } from './style';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import apiUser from '../../services/apiUser';
 
 export default function Post({ post, isFilled, likesCount, handleLike, postId, TL }) {
-
-    const navigate = useNavigate()
+    const [user, setUser] = useState(null);
+    const [isUserLoaded, setIsUserLoaded] = useState(false);
+    const navigate = useNavigate();
 
     const handleDataStyleClick = () => {
         window.open(post.link, '_blank');
@@ -27,46 +29,33 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
         try {
             const users = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
-            const user = users.data.find(u => u.username === username);
+            const user = users.data.find((u) => u.username === username);
             navigate(`/user/${user.id}`);
         } catch (err) {
-            console.log(err)
+            console.log(err);
             alert(err.response.data.message);
         }
     }
 
     useEffect(() => {
-        if (TL) {
-            if (post.article) {
-                if (post.article.includes("#")) {
-                    let regex=/#(\w+)/g;
-                    let palavras=[];
-                    for(let match of post.article.matchAll(regex)){
-                        palavras.push(match[1])
-                    }
-                    console.log("gpt",palavras)
-                    if (palavras.length > 0) {
-                        const addHashtags = async () => {
-                            for (let i = 0; i < palavras.length; i++) {
-                                axios.post(`${process.env.REACT_APP_API_URL}/hashtag`, {
-                                    "postId": postId,
-                                    "hashtag": palavras[i]
-                                })
-                                .then(res=>console.log(res.data))
-                                .catch(err=>console.log(err.message))
-                            }
-                        };
-                        addHashtags();
-                    }
-                }
-            }
+        if (post.userId) {
+            apiUser.getUser(post.userId)
+                .then((response) => {
+                    const userData = response.data;
+                    setUser(userData);
+                    setIsUserLoaded(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
-    }, [])
-    return (
+    }, [post.userId]);
+
+    return isUserLoaded ? (
         <PostContainer data-test="post">
             <UserContainer>
                 <UserImage
-                    src="https://yt3.ggpht.com/a/AATXAJw_Xyu7KMjEEeLFaFgSQeQk84Bj6GQqDeLd3w=s900-c-k-c0xffffffff-no-rj-mo"
+                    src={user ? user.image : linkrLogo}
                     alt="Foto do Usuário"
                 />
                 <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
@@ -75,17 +64,16 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </p>
             </UserContainer>
             <ContentContainer>
-
-                <h3 data-test="username" onClick={getUserPage}>Bernardo</h3>
-
-
+                <h3 data-test="username" onClick={getUserPage}>{user ? user.username : "Unknown User"}</h3>
                 <p>
                     {post.article ? (
-                        <ReactHashtag data-test="description" onHashtagClick={val => navigate(`/hashtag/${val.split('#')[1]}`) }>
+                        <ReactHashtag
+                            data-test="description"
+                            onHashtagClick={(val) => navigate(`/hashtag/${val.split('#')[1]}`)}
+                        >
                             {post.article}
                         </ReactHashtag>
                     ) : ""}
-
                 </p>
                 <DataStyle data-test="link" onClick={handleDataStyleClick}>
                     <DataText>
@@ -97,6 +85,5 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </DataStyle>
             </ContentContainer>
         </PostContainer>
-    );
+    ) : null;
 }
-

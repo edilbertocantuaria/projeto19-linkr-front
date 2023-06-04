@@ -135,7 +135,8 @@ export const DataText = styled.div`
             font-size: 0.5rem;
             line-height: 13px;
             color: #CECECE;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
         }
     }
 ;

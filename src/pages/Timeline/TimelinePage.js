@@ -16,7 +16,7 @@ export default function TimelinePage() {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
-  const [form, setForm] = useState({ link: '', article: null });
+  const [form, setForm] = useState({ link: '', article: null, userId: null });
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,7 +30,10 @@ export default function TimelinePage() {
     setIsPublishing(true);
 
     try {
-      const response = await apiPosts.postLink(form);
+      const userId = localStorage.getItem("userId");
+      const updatedForm = { ...form, userId: userId };
+      const response = await apiPosts.postLink(updatedForm);
+
       setIsPublishing(false);
       setForm({ link: '', article: null });
       console.log(response.data);
@@ -60,14 +63,14 @@ export default function TimelinePage() {
 
     fetchPosts();
   }, [isPublishing]);
-  console.log("t",posts)
+
   return (
     <Container>
       <TimelineContainer>
         <Title>timeline</Title>
         <PublishContainer>
           <img
-            src="https://yt3.ggpht.com/a/AATXAJw_Xyu7KMjEEeLFaFgSQeQk84Bj6GQqDeLd3w=s900-c-k-c0xffffffff-no-rj-mo"
+            src={localStorage.getItem("image")}
             alt="Foto do Usuário"
           />
           <FormPublishContainer>
