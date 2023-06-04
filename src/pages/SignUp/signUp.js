@@ -29,7 +29,7 @@ export default function SignUp() {
       await axios.post(URL, body)
       navigate('/')
     } catch (err) {
-      alert(err.response.data)
+      alert(err.response.data.message)
     } finally {
       setIsClicked(false)
     }

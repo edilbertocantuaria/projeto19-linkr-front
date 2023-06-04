@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 import React, { useEffect, useRef } from 'react';
 import linkrLogo from '../../assets/linkrLogo.png';
 import ReactHashtag from "react-hashtag"
 import { useState } from 'react';
 
+=======
+import React, { useEffect, useState } from 'react';
+import linkrLogo from '../../assets/linkrLogo.png';
+import ReactHashtag from 'react-hashtag';
+>>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
 import {
     ContentContainer,
     PostContainer,
@@ -17,18 +23,36 @@ import {
 } from './style';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import apiUser from '../../services/apiUser';
 
 export default function Post({ post, isFilled, likesCount, handleLike, postId, TL }) {
+    const [user, setUser] = useState(null);
+    const [isUserLoaded, setIsUserLoaded] = useState(false);
+    const navigate = useNavigate();
+
     const handleDataStyleClick = () => {
         window.open(post.link, '_blank');
     };
 
-    const navigate = useNavigate()
+    const getUserPage = async (e) => {
+        e.preventDefault();
+        const username = e.currentTarget.textContent;
+
+        try {
+            const users = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
+            const user = users.data.find((u) => u.username === username);
+            navigate(`/user/${user.id}`);
+        } catch (err) {
+            console.log(err);
+            alert(err.response.data.message);
+        }
+    }
 
     const [ableToEdit, setAbleToEdit] = useState(false)
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
+<<<<<<< HEAD
         if (TL) {
             if (post.article) {
                 if (post.article.includes("#")) {
@@ -87,9 +111,26 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
     return (
         <PostContainer>
+=======
+        if (post.userId) {
+            apiUser.getUser(post.userId)
+                .then((response) => {
+                    const userData = response.data;
+                    setUser(userData);
+                    setIsUserLoaded(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [post.userId]);
+
+    return isUserLoaded ? (
+        <PostContainer data-test="post">
+>>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
             <UserContainer>
                 <UserImage
-                    src="https://yt3.ggpht.com/a/AATXAJw_Xyu7KMjEEeLFaFgSQeQk84Bj6GQqDeLd3w=s900-c-k-c0xffffffff-no-rj-mo"
+                    src={user ? user.image : linkrLogo}
                     alt="Foto do Usuário"
                 />
                 <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
@@ -98,6 +139,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </p>
             </UserContainer>
             <ContentContainer>
+<<<<<<< HEAD
                 <h3>Bob Esponja
 
                     <div className='editANDdelete'>
@@ -137,8 +179,20 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                     ) : ""}
 
 
+=======
+                <h3 data-test="username" onClick={getUserPage}>{user ? user.username : "Unknown User"}</h3>
+                <p>
+                    {post.article ? (
+                        <ReactHashtag
+                            data-test="description"
+                            onHashtagClick={(val) => navigate(`/hashtag/${val.split('#')[1]}`)}
+                        >
+                            {post.article}
+                        </ReactHashtag>
+                    ) : ""}
+>>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
                 </p>
-                <DataStyle onClick={handleDataStyleClick}>
+                <DataStyle data-test="link" onClick={handleDataStyleClick}>
                     <DataText>
                         <p>{post.title}</p>
                         <p>{post.description}</p>
@@ -148,6 +202,5 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </DataStyle>
             </ContentContainer>
         </PostContainer>
-    );
+    ) : null;
 }
-

@@ -2,37 +2,46 @@ import styled from "styled-components"
 
 
 export const Left = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-
-
+width: 100vw;
 height: 100vh;
-width: 60vw;
-background-color: black;
+background-color: #151515;
+color: #FFF;
+padding-top: 300px;
+padding-left: 140px;
+padding-right: 30px;
+h1 {
+  font-family: 'Passion One', cursive;
+  font-size: 106px;
+  font-weight: 700;
+}
+p {
+  font-family: 'Oswald', sans-serif;
+  font-size: 43px;
+  font-weight: 700;
+}
 
-    h1{
 
-        margin-left: 100px;
-        font-family: 'Passion One', sans-serif;
-        font-style: normal;
-        font-weight: 700;
-        font-size:106px;
-        color: white;
-        line-height: 117px;
-        /* identical to box height */
-
-        letter-spacing: 0.05em;
-    }
-
-    p{
-        margin-left: 100px;
-        font-family: 'Oswald', sans-serif;
-        font-size:43px;
-        font-weight: bold;
-        color: white;
-        margin-bottom: 150px;
-
-    }
+    @media (max-width:900px) {
+        padding: 300px 20px 0 20px;
+      }
+      @media (max-width: 725px) {
+        width: 100%;
+        height: 30%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding-left: 0;
+        padding-top: 0;
+        padding-bottom: 17px;
+        h1 {
+          font-size: 76px;
+          margin-top: 10px;
+        }
+        p {
+          font-size: 23px;
+          margin-bottom: 10px;
+        }
+      }
 
 `

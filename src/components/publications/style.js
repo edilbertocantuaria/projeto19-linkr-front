@@ -4,6 +4,7 @@ import { BsPencil } from 'react-icons/bs';
 import { BiTrash } from "react-icons/bi"
 import { Link } from 'react-router-dom';
 
+
 export const heartBeatAnimation = keyframes`
   0% {
     transform: scale(1);
@@ -105,6 +106,7 @@ export const ContentContainer = styled.div`
   h3 {
     font-size: 19px;
     line-height: 23px;
+<<<<<<< HEAD
 
     display: flex;
     align-items: center;
@@ -112,6 +114,13 @@ export const ContentContainer = styled.div`
         margin-left: auto;
       }
 
+=======
+    transition:  all 1s ease;
+  }
+  h3:hover {
+    cursor: pointer;
+    filter: brightness(70%);
+>>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
   }
   p {
     background-color: brown;
@@ -124,7 +133,7 @@ export const ContentContainer = styled.div`
     }
   }
   span{
-    color: green;
+    color: white;
   }
 
 `;
@@ -180,7 +189,8 @@ export const DataText = styled.div`
             font-size: 0.5rem;
             line-height: 13px;
             color: #CECECE;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
         }
     }
 ;

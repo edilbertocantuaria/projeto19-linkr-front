@@ -21,16 +21,19 @@ export default function HashtagPage() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    
+
     axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
       .then(res => {
         setAllHashtags(res.data)
       })
       .catch(err => console.log(err.message))
+    console.log(hashtag)
+    console.log("query",`${process.env.REACT_APP_API_URL}/hashtag/${hashtag.trim()}`)
 
-    axios.get(`${process.env.REACT_APP_API_URL}/hashtag/${hashtag}?${Date.now()}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/hashtag/${hashtag.trim()}`)
       .then(res => {
         setPosts(res.data)
+        console.log("POSTS",res.data)
       })
       .catch(err => console.log(err.message))
 
@@ -39,7 +42,7 @@ export default function HashtagPage() {
     <>
       <Container>
         <TimelineContainer>
-          <Title>#{hashtag}</Title>
+          <Title data-test="hashtag-title">#{hashtag}</Title>
           {posts.map(post => (
             <Post
               key={post.id}
@@ -51,19 +54,20 @@ export default function HashtagPage() {
             />
           )
           )}
-
         </TimelineContainer>
-        <HashtagsContainer>
+        <HashtagsContainer data-test="trending">
           <h1>trending</h1>
           <CustomHr />
-          {allHashtags.map(h =>
-            <p >
-              <ReactHashtag onHashtagClick={val => {
-                navigate(`/hashtag/${val.split('#')[1]}`, { replace: true })
-              }}>
-                {`#${h.hashtag}`}
-              </ReactHashtag>
-            </p>)}
+          <AuxHashContainer>
+            {allHashtags.map(h =>
+              <p >
+                <ReactHashtag data-test="hashtag" onHashtagClick={val => {
+                  navigate(`/hashtag/${val.split('#')[1]}`, { replace: true })
+                }}>
+                  {`#${h.hashtag}`}
+                </ReactHashtag>
+              </p>)}
+          </AuxHashContainer>
         </HashtagsContainer>
       </Container>
     </>
@@ -80,13 +84,22 @@ const Container = styled.div`
   gap: 25px;
   @media (max-width: 600px) {
     flex-direction: column-reverse;
-    
-  }
+    justify-content: flex-end;
+}
 `;
 
 const TimelineContainer = styled.div`
   width: 100%;
   max-width: 611px;
+`;
+
+const AuxHashContainer = styled.div`
+@media (max-width: 600px) {
+  overflow: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  }
 `;
 
 const HashtagsContainer = styled.div`
@@ -112,12 +125,10 @@ const HashtagsContainer = styled.div`
     line-height: 40px;
   }
   @media (max-width: 600px) {
-    margin-top: 10px;
+    margin-top: 20px;
     max-height: 164px;
-    overflow: scroll;
     padding: 6px;
-    margin-left: 17px;
-
+    width: 100%;
   }
 `;
 const CustomHr = styled.hr`
@@ -137,9 +148,9 @@ const Title = styled.h1`
   margin-bottom: 43px;
   margin-top: 78px;
   @media (max-width: 600px) {
+    margin-top: 10px;
     font-size: 33px;
     margin-left: 17px;
-    margin-top: 20px;
     margin-bottom: 26px;
   }
 `;
@@ -156,42 +167,6 @@ const heartBeatAnimation = keyframes`
   }
 `;
 
-const PostContainer = styled.div`
-  display: flex;
-  color: white;
-  background-color: #171717;
-  border-radius: 16px;
-  padding: 15px;
-  gap: 15px;
-  margin-bottom: 16px;
-  img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-bottom: 17px;
-  }
-  @media (max-width: 600px) {
-    border-radius: 0;
-  }
-`;
-
-const UserContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  p{
-    font-family: 'Lato';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 9px;
-    line-height: 11px;
-    text-align: center;
-    margin-top: 15px;
-  }
-`
-
 const StyledHeartIcon = styled(({ isfilled, ...props }) =>
   isfilled ? <AiFillHeart {...props} /> : <AiOutlineHeart {...props} />
 )`
@@ -200,22 +175,4 @@ const StyledHeartIcon = styled(({ isfilled, ...props }) =>
   color: ${props => (props.isfilled ? 'red' : 'white')};
   animation: ${props => (props.isfilled ? heartBeatAnimation : 'none')} 0.5s
     ease-in-out;
-`;
-
-const ContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-family: 'Lato';
-  font-weight: 400;
-  gap: 7px;
-  h3 {
-    font-size: 19px;
-    line-height: 23px;
-  }
-  p {
-    font-size: 17px;
-    line-height: 20px;
-  }
-  div {
-  }
 `;
