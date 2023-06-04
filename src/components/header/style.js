@@ -86,6 +86,12 @@ export const UserSearchContainer = styled.div`
   align-items: center;
   width: 25%;
   margin: 20px auto;
+  @media (max-width: 800px) {
+      width: 40%;
+  }
+  @media (max-width: 400px) {
+    width: 50%;
+  }
 `;
 
 export const SearchIcon = styled(AiOutlineSearch)`

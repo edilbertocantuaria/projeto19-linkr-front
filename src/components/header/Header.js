@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FiChevronDown } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import UserSearch from "./UserSearch";
+import linkrIcon from "../../assets/linkrIcon.png"
 
 export default function Header() {
   const [avatar, setAvatar] = useState("");
@@ -42,16 +43,14 @@ export default function Header() {
 
   return (
     <HeaderContainer>
-      <div>
       <Logo onClick={() => navigate("/timeline")}>linkr</Logo>
-      </div>
+      <LogoIcon src={linkrIcon} alt='linkrIcon' />
       <UserSearch/>
       {(
         <UserContainer>
           <UserName>{name}</UserName>
           <UserImage
-            src={avatar}
-            alt="perfil"
+            style={{backgroundImage: `url(${avatar})`}}
             data-test="avatar"
             className={arrowRotated ? "rotated" : ""}
             onClick={() => {
@@ -98,8 +97,20 @@ const Logo = styled.h2`
   font-size: 49px;
   line-height: 54px;
   letter-spacing: 0.05em;
+  display: block;
   cursor: pointer;
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
+
+const LogoIcon = styled.img`
+  display: none;
+  @media (max-width: 600px) {
+    width: 13%;
+    display: inline-block;
+  }
+`
 
 const UserContainer = styled.div`
   display: flex;
@@ -107,26 +118,24 @@ const UserContainer = styled.div`
   gap: 10px;
 `;
 
-const UserName = styled.p`
+const UserName = styled.span`
   margin-right: 10px;
   font-family: "Oswald";
   font-weight: 400;
   font-size: 16px;
-  line-height: 64px;
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;
 
-const UserImage = styled.img`
+const UserImage = styled.div`
   cursor: pointer;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  cursor: pointer;
   transition: transform 0.3s ease;
- 
-  img{
-    cursor: pointer;
-
-  }
+  background-size: cover;
+  background-position: center center;
 `;
 
 const ArrowIcon = styled(FiChevronDown)`

@@ -23,10 +23,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         window.open(post.link, '_blank');
     };
 
-    const getUserPage = async (e) => {
-        e.preventDefault();
-        const username = e.currentTarget.textContent;
-
+    const getUserPage = async (username) => {
         try {
             const users = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
             const user = users.data.find((u) => u.username === username);
@@ -57,6 +54,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 <UserImage
                     src={user ? user.image : linkrLogo}
                     alt="Foto do Usuário"
+                    onClick={() => getUserPage(user.username)}
                 />
                 <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
                 <p>
@@ -64,7 +62,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </p>
             </UserContainer>
             <ContentContainer>
-                <h3 data-test="username" onClick={getUserPage}>{user ? user.username : "Unknown User"}</h3>
+                <h3 data-test="username"><span onClick={() => getUserPage(user.username)}>
+                    {user ? user.username : "Unknown User"}</span></h3>
                 <p>
                     {post.article ? (
                         <ReactHashtag
