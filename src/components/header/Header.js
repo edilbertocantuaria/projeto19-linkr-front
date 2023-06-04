@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { FiChevronDown } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import UserSearch from "./UserSearch";
 
 export default function Header() {
   const [avatar, setAvatar] = useState("");
@@ -41,7 +42,10 @@ export default function Header() {
 
   return (
     <HeaderContainer>
+      <div>
       <Logo onClick={() => navigate("/timeline")}>linkr</Logo>
+      </div>
+      <UserSearch/>
       {(
         <UserContainer>
           <UserName>{name}</UserName>
@@ -75,12 +79,17 @@ export default function Header() {
 
 
 const HeaderContainer = styled.div`
+  position: fixed;
+  top:0;
+  width: 100%;
   display: flex;
   align-items: center;
   height: 72px;
   background-color: #151515;
   padding: 0 20px;
   color: white;
+  justify-content: space-between;
+  z-index: 2;
 `;
 
 const Logo = styled.h2`
@@ -95,7 +104,6 @@ const Logo = styled.h2`
 const UserContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-left: auto;
   gap: 10px;
 `;
 
