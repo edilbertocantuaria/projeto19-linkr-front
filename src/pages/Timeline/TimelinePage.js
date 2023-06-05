@@ -63,11 +63,7 @@ export default function TimelinePage() {
 
     fetchPosts();
   }, [isPublishing]);
-<<<<<<< HEAD
   console.log("t", posts)
-=======
-
->>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
   return (
     <Container>
       <TimelineContainer>
@@ -123,8 +119,7 @@ export default function TimelinePage() {
               post={post}
               isFilled={isFilled}
               likesCount={likesCount}
-              handleLike={
-                handleLike}
+              handleLike={handleLike}
             />
           ))
         ) : (

@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import linkrLogo from '../../assets/linkrLogo.png';
 import ReactHashtag from "react-hashtag"
-import { useState } from 'react';
 
-=======
-import React, { useEffect, useState } from 'react';
-import linkrLogo from '../../assets/linkrLogo.png';
-import ReactHashtag from 'react-hashtag';
->>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
+
 import {
     ContentContainer,
     PostContainer,
@@ -52,7 +46,20 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-<<<<<<< HEAD
+        if (post.userId) {
+            apiUser.getUser(post.userId)
+                .then((response) => {
+                    const userData = response.data;
+                    setUser(userData);
+                    setIsUserLoaded(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [post.userId]);
+
+    useEffect(() => {
         if (TL) {
             if (post.article) {
                 if (post.article.includes("#")) {
@@ -79,9 +86,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
     const editingPostRef = useRef(null);
     function editPost(post) {
-
         if (ableToEdit) return setAbleToEdit(false);
-
         console.log("clicando para editar post");
         //IMPLEMENTAR AS REQUISIÇÕES AQUI
         console.log(post)
@@ -90,44 +95,21 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
     const saveChanges = () => {
         setSaving(true);
-      
         //IMPLEMENTAR AS REQUISIÇÕES AQUI
-      
-
-        setAbleToEdit(false); 
-        setSaving(false); 
-      };
+        setAbleToEdit(false);
+        setSaving(false);
+    };
 
 
     function deletePost(post) {
         console.log("clicando para excluir post");
         //IMPLEMENTAR AS REQUISIÇÕES AQUI
-
         console.log(post)
-
-
     }
 
 
-    return (
-        <PostContainer>
-=======
-        if (post.userId) {
-            apiUser.getUser(post.userId)
-                .then((response) => {
-                    const userData = response.data;
-                    setUser(userData);
-                    setIsUserLoaded(true);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }, [post.userId]);
-
     return isUserLoaded ? (
         <PostContainer data-test="post">
->>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
             <UserContainer>
                 <UserImage
                     src={user ? user.image : linkrLogo}
@@ -139,8 +121,10 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </p>
             </UserContainer>
             <ContentContainer>
-<<<<<<< HEAD
-                <h3>Bob Esponja
+
+                <h3 data-test="username"
+                    onClick={getUserPage}>
+                    {user ? user.username : "Unknown User"}
 
                     <div className='editANDdelete'>
                         <EditPost
@@ -156,10 +140,13 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
                 <p>
                     {post.article && !(ableToEdit) ? (
-                        <ReactHashtag onHashtagClick={val => navigate(`/hashtag/${val.split('#')[1]}`)}>
+                        <ReactHashtag
+                            data-test="description"
+                            onHashtagClick={val => navigate(`/hashtag/${val.split('#')[1]}`)}>
                             {post.article}
                         </ReactHashtag>
                     ) : ""}
+
                     {ableToEdit ? (
                         <EditingPost
                             defaultValue={post.article}
@@ -177,21 +164,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                             disabled={saving}
                         />
                     ) : ""}
-
-
-=======
-                <h3 data-test="username" onClick={getUserPage}>{user ? user.username : "Unknown User"}</h3>
-                <p>
-                    {post.article ? (
-                        <ReactHashtag
-                            data-test="description"
-                            onHashtagClick={(val) => navigate(`/hashtag/${val.split('#')[1]}`)}
-                        >
-                            {post.article}
-                        </ReactHashtag>
-                    ) : ""}
->>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
                 </p>
+
                 <DataStyle data-test="link" onClick={handleDataStyleClick}>
                     <DataText>
                         <p>{post.title}</p>
@@ -201,6 +175,6 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
                 </DataStyle>
             </ContentContainer>
-        </PostContainer>
+        </PostContainer >
     ) : null;
 }
