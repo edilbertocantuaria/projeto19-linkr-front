@@ -37,6 +37,11 @@ export const UserImage = styled.img`
     height: 40px;
     border-radius: 50%;
     margin-bottom: 17px;
+    transition:  all 300ms ease;
+    &:hover{
+      cursor: pointer;
+      filter: brightness(70%);
+    }
 `
 
 export const UserContainer = styled.div`
@@ -102,28 +107,24 @@ export const ContentContainer = styled.div`
   font-weight: 400;
   gap: 7px;
   font-size: 17px;
-    line-height: 20px;
+  line-height: 20px;
   h3 {
-    font-size: 19px;
-    line-height: 23px;
-<<<<<<< HEAD
-
     display: flex;
+    font-size: 19px;
     align-items: center;
-      .editANDdelete{
-        margin-left: auto;
+    span {
+      display: inline;
+      transition:  all 300ms ease;
+    }
+    span:hover {
+      cursor: pointer;
+      filter: brightness(70%)
+    }
+    .editANDdelete{
+      margin-left: auto;
       }
-
-=======
-    transition:  all 1s ease;
-  }
-  h3:hover {
-    cursor: pointer;
-    filter: brightness(70%);
->>>>>>> dd37f937e84832f7dd0f9bcfefd65f491ef7f9c3
   }
   p {
-    background-color: brown;
     font-size: 17px;
     line-height: 20px;
 

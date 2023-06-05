@@ -28,10 +28,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         window.open(post.link, '_blank');
     };
 
-    const getUserPage = async (e) => {
-        e.preventDefault();
-        const username = e.currentTarget.textContent;
-
+    const getUserPage = async (username) => {
         try {
             const users = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
             const user = users.data.find((u) => u.username === username);
@@ -52,36 +49,13 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                     const userData = response.data;
                     setUser(userData);
                     setIsUserLoaded(true);
+                    console.log("response");
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         }
     }, [post.userId]);
-
-    useEffect(() => {
-        if (TL) {
-            if (post.article) {
-                if (post.article.includes("#")) {
-                    let postComHashtag = post.article.split('#');
-                    if (postComHashtag.length > 0) {
-                        const addHashtags = async () => {
-                            for (let i = 1; i < postComHashtag.length; i++) {
-                                console.log("for");
-                                axios.post(`${process.env.REACT_APP_API_URL}/hashtag`, {
-                                    "postId": postId,
-                                    "hashtag": postComHashtag[i]
-                                })
-                                    .then(res => console.log(res.data))
-                                    .catch(err => console.log(err.message))
-                            }
-                        };
-                        addHashtags();
-                    }
-                }
-            }
-        }
-    }, [])
 
 
     const editingPostRef = useRef(null);
@@ -114,6 +88,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 <UserImage
                     src={user ? user.image : linkrLogo}
                     alt="Foto do Usuário"
+                    onClick={() => getUserPage(user.username)}
                 />
                 <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
                 <p>
@@ -121,11 +96,9 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </p>
             </UserContainer>
             <ContentContainer>
-
-                <h3 data-test="username"
-                    onClick={getUserPage}>
-                    {user ? user.username : "Unknown User"}
-
+                <h3 data-test="username">
+                    <span onClick={() => getUserPage(user.username)}>
+                    {user ? user.username : "Unknown User"}</span>
                     <div className='editANDdelete'>
                         <EditPost
                             onClick={() => editPost(post)}
@@ -134,10 +107,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                         <DeletePost
                             onClick={() => deletePost(post)}
                             data-test="delete-btn" />
-
                     </div>
                 </h3>
-
                 <p>
                     {post.article && !(ableToEdit) ? (
                         <ReactHashtag
