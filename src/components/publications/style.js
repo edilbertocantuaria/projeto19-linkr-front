@@ -463,4 +463,51 @@ export const Overlay = styled.div`
   z-index: 9999;
 `;
 
+export const AuxHashContainer = styled.div`
+@media (max-width: 600px) {
+  overflow: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  }
+`;
 
+export const HashtagsContainer = styled.div`
+  width: 301px;
+  height: 406px;
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  color: white;
+  background-color: #171717;
+  border-radius: 16px;
+  margin-top: 160px;
+  padding: 15px;
+  margin-left: 20px;
+  p{
+    font-size: 19px;
+    margin-bottom: 5px;
+    font-family: 'Lato';
+    line-height: 23px;
+  }
+  h1{
+    font-size: 27px;
+    font-family: 'Oswald';
+    line-height: 40px;
+  }
+  @media (max-width: 600px) {
+    margin-top: 20px;
+    max-height: 164px;
+    padding: 6px;
+    width: 100%;
+  }
+`;
+export const CustomHr = styled.hr`
+  border: 1px solid #484848;
+  margin-top: 12px;
+  margin-bottom: 22px;
+  @media (max-width: 600px) {
+    margin-top: 6px;
+    margin-bottom: 10px;
+  }
+`;
