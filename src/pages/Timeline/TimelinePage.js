@@ -63,7 +63,7 @@ export default function TimelinePage() {
 
     fetchPosts();
   }, [isPublishing]);
-
+  console.log("t", posts)
   return (
     <Container>
       <TimelineContainer>
