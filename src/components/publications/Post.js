@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import linkrLogo from '../../assets/linkrLogo.png';
-import ReactHashtag from "react-hashtag"
 
 
 
@@ -170,12 +169,12 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                     </div>
                 </h3>
                 <p>
-                    {post.article && !(ableToEdit) ? (
-                        <ReactHashtag
-                            data-test="description"
-                            onHashtagClick={val => navigate(`/hashtag/${val.split('#')[1]}`)}>
-                            {post.article}
-                        </ReactHashtag>
+                    {post.article && !(ableToEdit) ? ( <div data-test="description">{post.article}</div>
+                        // <ReactHashtag
+                        //     data-test="description"
+                        //     onHashtagClick={val => navigate(`/hashtag/${val.split('#')[1]}`)}>
+                        //     {post.article}
+                        // </ReactHashtag>
                     ) : ""}
 
                     {ableToEdit ? (

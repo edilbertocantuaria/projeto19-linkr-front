@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import ReactHashtag from 'react-hashtag';
 import Post from '../../components/publications/Post';
 
 export default function HashtagPage() {
@@ -61,11 +60,11 @@ export default function HashtagPage() {
           <AuxHashContainer>
             {allHashtags.map(h =>
               <p >
-                <ReactHashtag data-test="hashtag" onHashtagClick={val => {
+                {/* <ReactHashtag data-test="hashtag" onHashtagClick={val => {
                   navigate(`/hashtag/${val.split('#')[1]}`, { replace: true })
                 }}>
                   {`#${h.hashtag}`}
-                </ReactHashtag>
+                </ReactHashtag> */}
               </p>)}
           </AuxHashContainer>
         </HashtagsContainer>
