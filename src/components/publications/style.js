@@ -3,7 +3,7 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { BsPencil } from 'react-icons/bs';
 import { BiTrash } from "react-icons/bi"
 import { Link } from 'react-router-dom';
-
+import ReactModal from 'react-modal';
 
 export const heartBeatAnimation = keyframes`
   0% {
@@ -95,6 +95,10 @@ font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 14px;
+
+:focus{
+  outline: none;
+}
 
 `
 
@@ -196,3 +200,96 @@ export const DataText = styled.div`
     }
 ;
 `
+export const Modal = styled(ReactModal)`
+  width: 42%;
+  height: 25.6%;
+
+  @media (max-width: 600px) {
+    width: 80%;
+    height: auto;
+    padding: 10px;
+        }
+ 
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  background: #333333;
+  border-radius: 50px;
+  border: none;
+
+  :focus{
+    outline: none;
+  }
+  
+  p{
+  margin-top: 10px;
+   font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 34px;
+  text-align: center;
+
+  @media (max-width: 600px) {
+   font-size: 30px;
+    border-radius: 0;
+  }
+
+  color: #FFFFFF;
+  }
+  
+  div{
+    width: 70%;
+    display: flex;
+    justify-content: space-around;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      margin: 25px 0 10px 0;
+    }
+  }
+
+  button{
+    @media (max-width: 600px) {
+      margin-bottom: 25px ;
+          }
+  }
+
+   .cancelButton{
+    width: 134px;
+    height: 37px;
+    font-size: 18px;
+    color: #1877F2;
+    background: #FFFFFF;
+    border-radius: 5px;
+    border:none
+   }
+
+   .confirmButton{
+    width: 134px;
+    height: 37px;
+    font-size: 18px;
+    color: #FFFFFF;
+    background: #1877F2;
+    border-radius: 5px;
+    border:none
+   }
+`;
+
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+`;
+
+
