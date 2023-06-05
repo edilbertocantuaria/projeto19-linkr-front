@@ -13,6 +13,8 @@ import UserPage from "./pages/User/UserPage.js";
 export default function App() {
   const [user, setUser] = useState("");
 
+
+
   return (
     <UserContext1.Provider value={{ user, setUser }}>
       <Provider>

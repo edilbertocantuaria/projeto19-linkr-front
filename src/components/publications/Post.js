@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import linkrLogo from '../../assets/linkrLogo.png';
-import ReactHashtag from 'react-hashtag';
+import ReactHashtag from "react-hashtag"
+
+
 import {
     ContentContainer,
     PostContainer,
     UserImage,
     StyledHeartIcon,
+    EditPost,
+    DeletePost,
     UserContainer,
     DataStyle,
-    DataText
+    DataText,
+    EditingPost
 } from './style';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +42,9 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         }
     }
 
+    const [ableToEdit, setAbleToEdit] = useState(false)
+    const [saving, setSaving] = useState(false);
+
     useEffect(() => {
         if (post.userId) {
             apiUser.getUser(post.userId)
@@ -51,6 +59,55 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         }
     }, [post.userId]);
 
+    useEffect(() => {
+        if (TL) {
+            if (post.article) {
+                if (post.article.includes("#")) {
+                    let postComHashtag = post.article.split('#');
+                    if (postComHashtag.length > 0) {
+                        const addHashtags = async () => {
+                            for (let i = 1; i < postComHashtag.length; i++) {
+                                console.log("for");
+                                axios.post(`${process.env.REACT_APP_API_URL}/hashtag`, {
+                                    "postId": postId,
+                                    "hashtag": postComHashtag[i]
+                                })
+                                    .then(res => console.log(res.data))
+                                    .catch(err => console.log(err.message))
+                            }
+                        };
+                        addHashtags();
+                    }
+                }
+            }
+        }
+    }, [])
+
+
+    const editingPostRef = useRef(null);
+    function editPost(post) {
+        if (ableToEdit) return setAbleToEdit(false);
+        console.log("clicando para editar post");
+        //IMPLEMENTAR AS REQUISIÇÕES AQUI
+        console.log(post)
+        setAbleToEdit(true);
+    }
+
+    const saveChanges = () => {
+        setSaving(true);
+        //IMPLEMENTAR AS REQUISIÇÕES AQUI
+        setAbleToEdit(false);
+        setSaving(false);
+    };
+
+
+    function deletePost(post) {
+        console.log("clicando para excluir post");
+        //IMPLEMENTAR AS REQUISIÇÕES AQUI
+        console.log(post)
+    }
+
+
     return isUserLoaded ? (
         <PostContainer data-test="post">
             <UserContainer>
@@ -64,26 +121,60 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </p>
             </UserContainer>
             <ContentContainer>
-                <h3 data-test="username" onClick={getUserPage}>{user ? user.username : "Unknown User"}</h3>
+
+                <h3 data-test="username"
+                    onClick={getUserPage}>
+                    {user ? user.username : "Unknown User"}
+
+                    <div className='editANDdelete'>
+                        <EditPost
+                            onClick={() => editPost(post)}
+                            data-test="edit-btn"
+                        />
+                        <DeletePost
+                            onClick={() => deletePost(post)}
+                            data-test="delete-btn" />
+
+                    </div>
+                </h3>
+
                 <p>
-                    {post.article ? (
+                    {post.article && !(ableToEdit) ? (
                         <ReactHashtag
                             data-test="description"
-                            onHashtagClick={(val) => navigate(`/hashtag/${val.split('#')[1]}`)}
-                        >
+                            onHashtagClick={val => navigate(`/hashtag/${val.split('#')[1]}`)}>
                             {post.article}
                         </ReactHashtag>
                     ) : ""}
+
+                    {ableToEdit ? (
+                        <EditingPost
+                            defaultValue={post.article}
+                            autoFocus
+                            ref={editingPostRef}
+                            onClick={() => setAbleToEdit(false)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Escape') {
+                                    setAbleToEdit(false);
+                                } else if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    saveChanges();
+                                }
+                            }}
+                            disabled={saving}
+                        />
+                    ) : ""}
                 </p>
+
                 <DataStyle data-test="link" onClick={handleDataStyleClick}>
                     <DataText>
                         <p>{post.title}</p>
                         <p>{post.description}</p>
                         <p>{post.link}</p>
                     </DataText>
-                    <img src={post.image ? post.image : linkrLogo} />
+
                 </DataStyle>
             </ContentContainer>
-        </PostContainer>
+        </PostContainer >
     ) : null;
 }
