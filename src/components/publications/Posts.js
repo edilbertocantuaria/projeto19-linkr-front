@@ -59,7 +59,6 @@ export default function Posts({ username, userImage, userId }) {
   };
 
   useEffect(() => {
-
     axios.get(`${process.env.REACT_APP_API_URL}/hashtag`)
       .then(res => {
         setAllHashtags(res.data)

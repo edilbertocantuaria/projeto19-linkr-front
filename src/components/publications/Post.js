@@ -173,6 +173,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                     {post.article && !(ableToEdit) ? (
                         reactStringReplace(post.article, /#(\w+)/g, (match, i) => (
                             <span
+                                data-test="description"
                                 key={i}
                                 onClick={() => {
                                 navigate(`/hashtag/${match.slice(0)}`);
