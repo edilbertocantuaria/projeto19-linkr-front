@@ -63,6 +63,34 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
     }, [post.userId]);
 
 
+    useEffect(() => {
+        if (TL) {
+            if (post.article) {
+                if (post.article.includes("#")) {
+                    let regex=/#(\w+)/g;
+                    let palavras=[];
+                    for(let match of post.article.matchAll(regex)){
+                        palavras.push(match[1])
+                    }
+                    console.log("gpt",palavras)
+                    if (palavras.length > 0) {
+                        const addHashtags = async () => {
+                            for (let i = 0; i < palavras.length; i++) {
+                                axios.post(`${process.env.REACT_APP_API_URL}/hashtag`, {
+                                    "postId": postId,
+                                    "hashtag": palavras[i]
+                                })
+                                .then(res=>console.log(res.data))
+                                .catch(err=>console.log(err.message))
+                            }
+                        };
+                        addHashtags();
+                    }
+                }
+            }
+        }
+    }, [])
+
     const editingPostRef = useRef(null);
     function editPost(post) {
         if (ableToEdit) return setAbleToEdit(false);
