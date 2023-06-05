@@ -69,9 +69,10 @@ export default function TimelinePage() {
       <TimelineContainer>
         <Title>timeline</Title>
         <PublishContainer>
-          <img
-            src={localStorage.getItem("image")}
-            alt="Foto do Usuário"
+        <img
+            src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
+            style={{backgroundImage: `url(${localStorage.getItem("image")})`}}
+            alt="userImage"
           />
           <FormPublishContainer>
             <p>What are you going to share today?</p>

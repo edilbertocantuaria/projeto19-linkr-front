@@ -38,6 +38,8 @@ export const UserImage = styled.img`
     border-radius: 50%;
     margin-bottom: 17px;
     transition:  all 300ms ease;
+    background-size: cover;
+    background-position: center center;
     &:hover{
       cursor: pointer;
       filter: brightness(70%);

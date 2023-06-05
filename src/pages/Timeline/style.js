@@ -49,6 +49,7 @@ export const PublishContainer = styled.div`
   min-height: fit-content;
   border-radius: 16px;
   display: flex;
+  position: relative;
   padding: 15px;
   gap: 15px;
   margin-bottom: 29px;
@@ -56,6 +57,8 @@ export const PublishContainer = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    background-size: cover;
+    background-position: center center;
   }
   @media (max-width: 600px) {
     border-radius: 0;

@@ -86,8 +86,9 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         <PostContainer data-test="post">
             <UserContainer>
                 <UserImage
-                    src={user ? user.image : linkrLogo}
-                    alt="Foto do Usuário"
+                    src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
+                    style={{backgroundImage: `url(${user.image})`}}
+                    alt="userImage"
                     onClick={() => getUserPage(user.username)}
                 />
                 <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
