@@ -3,6 +3,7 @@ import linkrLogo from '../../assets/linkrLogo.png';
 import ReactHashtag from "react-hashtag"
 
 
+
 import {
     ContentContainer,
     PostContainer,
@@ -13,7 +14,9 @@ import {
     UserContainer,
     DataStyle,
     DataText,
-    EditingPost
+    EditingPost,
+    Modal,
+    Overlay
 } from './style';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +25,10 @@ import apiUser from '../../services/apiUser';
 export default function Post({ post, isFilled, likesCount, handleLike, postId, TL }) {
     const [user, setUser] = useState(null);
     const [isUserLoaded, setIsUserLoaded] = useState(false);
+    const [ableToEdit, setAbleToEdit] = useState(false)
+    const [saving, setSaving] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
     const navigate = useNavigate();
 
     const handleDataStyleClick = () => {
@@ -39,8 +46,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         }
     }
 
-    const [ableToEdit, setAbleToEdit] = useState(false)
-    const [saving, setSaving] = useState(false);
+
 
     useEffect(() => {
         if (post.userId) {
@@ -76,11 +82,21 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
 
     function deletePost(post) {
+
         console.log("clicando para excluir post");
+        setShowModal(true)
+
         //IMPLEMENTAR AS REQUISIÇÕES AQUI
         console.log(post)
     }
 
+    const handleOpenModal = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
 
     return isUserLoaded ? (
         <PostContainer data-test="post">
@@ -99,15 +115,31 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
             <ContentContainer>
                 <h3 data-test="username">
                     <span onClick={() => getUserPage(user.username)}>
-                    {user ? user.username : "Unknown User"}</span>
+                        {user ? user.username : "Unknown User"}</span>
                     <div className='editANDdelete'>
                         <EditPost
                             onClick={() => editPost(post)}
                             data-test="edit-btn"
                         />
                         <DeletePost
-                            onClick={() => deletePost(post)}
-                            data-test="delete-btn" />
+                            onClick={handleOpenModal}
+                            data-test="delete-btn"
+                        />
+
+                        <Modal
+                            isOpen={showModal}
+                            onRequestClose={handleCloseModal}
+                            ariaHideApp={false}
+                        >
+
+                            <p>Are you sure you want to delete this post?</p>
+                            <div>
+                                <button className="cancelButton"  data-test="cancel" onClick={handleCloseModal}>No, go back</button>
+                                <button className="confirmButton"  data-test="confirm"  onClick={() => deletePost(post)}>Yes, delete it</button>
+                            </div>
+
+                        </Modal>
+
                     </div>
                 </h3>
                 <p>
@@ -147,6 +179,10 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
                 </DataStyle>
             </ContentContainer>
+
         </PostContainer >
+
+
+
     ) : null;
 }
