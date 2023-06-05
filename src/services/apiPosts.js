@@ -12,5 +12,11 @@ function getPosts() {
     return promise;
 }
 
-const apiPosts = { postLink, getPosts };
+function getUserPosts(id) {
+    const promise = axios.get(`
+    ${process.env.REACT_APP_API_URL}/timeline/${id}`);
+    return promise;
+}
+
+const apiPosts = { postLink, getPosts, getUserPosts };
 export default apiPosts;
