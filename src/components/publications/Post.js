@@ -41,6 +41,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                     const userData = response.data;
                     setUser(userData);
                     setIsUserLoaded(true);
+                    console.log("response");
                 })
                 .catch((error) => {
                     console.log(error);
