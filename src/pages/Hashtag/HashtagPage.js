@@ -4,6 +4,7 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import Post from '../../components/publications/Post';
+import reactStringReplace from 'react-string-replace';
 
 export default function HashtagPage() {
   const handleLike = () => {
@@ -60,11 +61,18 @@ export default function HashtagPage() {
           <AuxHashContainer>
             {allHashtags.map(h =>
               <p >
-                {/* <ReactHashtag data-test="hashtag" onHashtagClick={val => {
-                  navigate(`/hashtag/${val.split('#')[1]}`, { replace: true })
-                }}>
-                  {`#${h.hashtag}`}
-                </ReactHashtag> */}
+                {
+                  reactStringReplace(`#${h.hashtag}`, /#(\w+)/g, (match, i) => (
+                  <span
+                    key={i}
+                    onClick={() => {
+                      navigate(`/hashtag/${match.slice(0)}`, { replace: true });
+                    }}
+                  >
+                    #{match}
+                  </span>
+                ))
+                }
               </p>)}
           </AuxHashContainer>
         </HashtagsContainer>
