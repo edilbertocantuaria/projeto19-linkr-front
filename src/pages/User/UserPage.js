@@ -4,27 +4,56 @@ import { ThreeDots } from 'react-loader-spinner';
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import apiUser from "../../services/apiUser";
+import axios from "axios";
 
 export default function UserPage() {
     const { id } = useParams();
+    const [following, setFollowing] = useState(false);
+    const [follower, setFollower] = useState()
     const [user, setUser] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loadingScreen, setLoadingScreen] = useState(true);
+    const [isLoading, setIsLoading] = useState(false)
+
+    const idFromLocalStorage = localStorage.getItem("userId");
+
+    async function handleFollow() {
+        setIsLoading(true)
+        if (!following) {
+            try {
+                await axios.post(`${process.env.REACT_APP_API_URL}/follow/${user.id}`, { followerId: idFromLocalStorage })
+                setFollowing(true);
+                setIsLoading(false);
+            } catch (err) {
+                console.log(err)
+            }
+        } else {
+            await axios.post(`${process.env.REACT_APP_API_URL}/unfollow/${user.id}`, { followerId: idFromLocalStorage })
+            setFollowing(false);
+            setIsLoading(false);
+        }
+    }
 
     useEffect(() => {
         apiUser.getUser(id)
         .then((response) => {
-            const userData = response.data;
+            const userData = response.data.user;
+            const followers = response.data.followers.rows;
+            const follower = followers.find(f => Number(f.followerId) === Number(idFromLocalStorage));
+            if (follower) {
+                setFollower(follower);
+                setFollowing(true);
+            }
             setUser(userData);
-            setIsLoading(false);
+            setLoadingScreen(false);
         })
         .catch((error) => {
             console.log(error);
         });
-    })
+    }, [])
 
     return (
         <>
-        {isLoading ? (
+        {loadingScreen ? (
             <LoadingContainer>
                 <LoadingStyle>
                 <p>Loading</p>
@@ -41,7 +70,8 @@ export default function UserPage() {
             </LoadingStyle>
           </LoadingContainer>
         ) : (
-            <Posts username={user.username} userId={id}></Posts>
+            <Posts username={user.username} userId={id} 
+            handleFollow={handleFollow} following={following} isLoading={isLoading}></Posts>
         )}
         </>
     )

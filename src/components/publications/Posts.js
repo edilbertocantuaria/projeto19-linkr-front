@@ -17,15 +17,16 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import reactStringReplace from 'react-string-replace';
 import { useNavigate } from 'react-router';
+import ButtonFollow from '../button/ButtonFollow';
 
 
-export default function Posts({ username, userImage, userId }) {
+export default function Posts({ username, userImage, userId, handleFollow, following, isLoading}) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [form, setForm] = useState({ link: '', article: null, userId: null });
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadingScreen, setLoadingScreen] = useState(true);
   const [allHashtags, setAllHashtags] = useState([]);
 
   const navigate = useNavigate();
@@ -72,12 +73,13 @@ export default function Posts({ username, userImage, userId }) {
         async function fetchPosts()  {
             try {
               const response = await apiPosts.getPosts();
+              console.log(posts);
               setPosts(response.data);
-              setIsLoading(false);
+              setLoadingScreen(false);
               console.log("posts:", posts);
             } catch (error) {
               console.error(error);
-              setIsLoading(false);
+              setLoadingScreen(false);
             }
         }
         fetchPosts();
@@ -87,10 +89,10 @@ export default function Posts({ username, userImage, userId }) {
                 console.log(userId)
                 const response = await apiPosts.getUserPosts(Number(userId));
                 setPosts(response.data);
-                setIsLoading(false);
+                setLoadingScreen(false);
             } catch (error) {
                 console.error(error);
-                setIsLoading(false);
+                setLoadingScreen(false);
             }
         }
         fetchUserPosts();
@@ -136,7 +138,8 @@ export default function Posts({ username, userImage, userId }) {
             </FormPublishContainer>
         </PublishContainer>
         )}
-        {isLoading ? (
+        {username ? <ButtonFollow handleFollow={handleFollow} following={following} isLoading={isLoading}></ButtonFollow> : <></>}
+        {loadingScreen ? (
           <LoadingStyle>
             <p>Loading</p>
             <ThreeDots
