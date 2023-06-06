@@ -39,6 +39,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         try {
             const users = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
             const user = users.data.find((u) => u.username === username);
+            console.log(user)
             navigate(`/user/${user.id}`);
         } catch (err) {
             console.log(err);
@@ -52,7 +53,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         if (post.userId) {
             apiUser.getUser(post.userId)
                 .then((response) => {
-                    const userData = response.data;
+                    const userData = response.data.user;
                     setUser(userData);
                     setIsUserLoaded(true);
                 })
