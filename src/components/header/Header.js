@@ -50,6 +50,7 @@ export default function Header() {
         <UserContainer>
           <UserName>{name}</UserName>
           <UserImage
+            src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
             style={{backgroundImage: `url(${avatar})`}}
             data-test="avatar"
             className={arrowRotated ? "rotated" : ""}
@@ -128,7 +129,7 @@ const UserName = styled.span`
   }
 `;
 
-const UserImage = styled.div`
+const UserImage = styled.img`
   cursor: pointer;
   width: 40px;
   height: 40px;

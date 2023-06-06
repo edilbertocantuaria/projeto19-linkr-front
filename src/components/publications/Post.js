@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import reactStringReplace from 'react-string-replace'
 import linkrLogo from '../../assets/linkrLogo.png';
-import ReactHashtag from "react-hashtag"
 
 
 
@@ -39,6 +39,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         try {
             const users = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
             const user = users.data.find((u) => u.username === username);
+            console.log(user)
             navigate(`/user/${user.id}`);
         } catch (err) {
             console.log(err);
@@ -52,10 +53,9 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         if (post.userId) {
             apiUser.getUser(post.userId)
                 .then((response) => {
-                    const userData = response.data;
+                    const userData = response.data.user;
                     setUser(userData);
                     setIsUserLoaded(true);
-                    console.log("response");
                 })
                 .catch((error) => {
                     console.log(error);
@@ -130,8 +130,9 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         <PostContainer data-test="post">
             <UserContainer>
                 <UserImage
-                    src={user ? user.image : linkrLogo}
-                    alt="Foto do Usuário"
+                    src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
+                    style={{backgroundImage: `url(${user.image})`}}
+                    alt="userImage"
                     onClick={() => getUserPage(user.username)}
                 />
                 <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
@@ -171,11 +172,17 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 </h3>
                 <p>
                     {post.article && !(ableToEdit) ? (
-                        <ReactHashtag
-                            data-test="description"
-                            onHashtagClick={val => navigate(`/hashtag/${val.split('#')[1]}`)}>
-                            {post.article}
-                        </ReactHashtag>
+                        reactStringReplace(post.article, /#(\w+)/g, (match, i) => (
+                            <span
+                                data-test="description"
+                                key={i}
+                                onClick={() => {
+                                navigate(`/hashtag/${match.slice(0)}`);
+                                }}
+                            >
+                                #{match}
+                            </span>
+                        ))
                     ) : ""}
 
                     {ableToEdit ? (

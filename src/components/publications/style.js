@@ -5,6 +5,175 @@ import { BiTrash } from "react-icons/bi"
 import { Link } from 'react-router-dom';
 import ReactModal from 'react-modal';
 
+const pulseAnimation = keyframes`
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+`;
+
+export const Container = styled.div`
+  background-color: #333333;
+  min-height: calc(100vh - 72px);
+  height: calc(100% - 72px);
+  display: flex;
+  justify-content: center;
+  padding-bottom: 40px;
+  margin-top: 72px;
+`;
+
+export const TimelineContainer = styled.div`
+  width: 100%;
+  max-width: 611px;
+`;
+
+export const Title = styled.h1`
+  color: white;
+  font-family: 'Oswald';
+  font-size: 43px;
+  font-weight: 700;
+  margin-bottom: 43px;
+  margin-top: 78px;
+  @media (max-width: 600px) {
+    margin-left: 17px;
+    margin-top: 43px;
+    margin-bottom: 26px;
+  }
+`;
+
+export const PublishContainer = styled.div`
+  background-color: white;
+  min-height: fit-content;
+  border-radius: 16px;
+  display: flex;
+  position: relative;
+  padding: 15px;
+  gap: 15px;
+  margin-bottom: 29px;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center center;
+  }
+  @media (max-width: 600px) {
+    border-radius: 0;
+    img{
+      display: none;
+    }
+  }
+`;
+
+export const FormPublishContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  p{
+    font-family: 'Lato';
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 24px;
+    color: #707070;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+    margin-bottom: 30px;
+    input {
+      background-color: #efefef;
+      border: none;
+      border-radius: 5px;
+      padding-left: 10px;
+      min-height: 30px;
+      outline-color: #151515;
+        &::placeholder {
+          font-family: 'Lato';
+          font-weight: 300;
+          font-size: 15px;
+          line-height: 18px;
+          color: #949494;
+        }
+    }
+
+    textarea{
+      resize: vertical;
+      background-color: #efefef;
+      border: none;
+      border-radius: 5px;
+      padding-left: 10px;
+      min-height: 66px;
+      padding: 7px;
+      outline-color: #151515;
+      &::placeholder {
+          font-family: 'Lato';
+          font-weight: 300;
+          font-size: 15px;
+          line-height: 18px;
+          color: #949494;
+        }
+    }
+
+    button {
+      width: 112px;
+      height: 31px;
+      position: absolute;
+      right: 0;
+      bottom: -35px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1877f2;
+      color: white;
+      cursor: pointer;
+    }
+  }
+  @media (max-width: 600px) {
+    p{
+      text-align: center;
+    }
+  }
+`;
+
+export const LoadingStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  p {
+    margin-top: 30px;
+    color: white;
+    font-family: 'Oswald';
+    font-size: 24px;
+    font-weight: 700;
+    animation: ${pulseAnimation} 2s infinite;
+  }
+`;
+
+export const EmptyStyle = styled.div`
+ display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  p {
+    margin-top: 30px;
+    color: white;
+    font-family: 'Oswald';
+    font-size: 24px;
+    font-weight: 700;
+  }
+`
+
 export const heartBeatAnimation = keyframes`
   0% {
     transform: scale(1);
@@ -38,6 +207,8 @@ export const UserImage = styled.img`
     border-radius: 50%;
     margin-bottom: 17px;
     transition:  all 300ms ease;
+    background-size: cover;
+    background-position: center center;
     &:hover{
       cursor: pointer;
       filter: brightness(70%);
@@ -292,4 +463,51 @@ export const Overlay = styled.div`
   z-index: 9999;
 `;
 
+export const AuxHashContainer = styled.div`
+@media (max-width: 600px) {
+  overflow: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  }
+`;
 
+export const HashtagsContainer = styled.div`
+  width: 301px;
+  height: 406px;
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  color: white;
+  background-color: #171717;
+  border-radius: 16px;
+  margin-top: 160px;
+  padding: 15px;
+  margin-left: 20px;
+  p{
+    font-size: 19px;
+    margin-bottom: 5px;
+    font-family: 'Lato';
+    line-height: 23px;
+  }
+  h1{
+    font-size: 27px;
+    font-family: 'Oswald';
+    line-height: 40px;
+  }
+  @media (max-width: 600px) {
+    margin-top: 20px;
+    max-height: 164px;
+    padding: 6px;
+    width: 100%;
+  }
+`;
+export const CustomHr = styled.hr`
+  border: 1px solid #484848;
+  margin-top: 12px;
+  margin-bottom: 22px;
+  @media (max-width: 600px) {
+    margin-top: 6px;
+    margin-bottom: 10px;
+  }
+`;
