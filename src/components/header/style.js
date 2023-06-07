@@ -163,7 +163,14 @@ export const UserItem = styled.li`
     font-size: 16px;
     color: #515151;
   }
-
+  span:nth-child(3) {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #1877f2;
+    margin-left: 5px;
+  }
   &:hover {
     background-color: #BDBDBD;
   }

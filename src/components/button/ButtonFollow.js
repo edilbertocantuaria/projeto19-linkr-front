@@ -3,13 +3,13 @@ import { Button } from "./style.js"
 import { Blocks } from "react-loader-spinner";
 import axios from "axios";
 
-export default function ButtonFollow({handleFollow, following, isLoading}) {
+export default function ButtonFollow({handleFollow, following, isLoading, isUser}) {
 
 
     return (
         
         <>
-            <Button onClick={handleFollow} disabled={isLoading} color={following}>{isLoading ? <Blocks
+            <Button onClick={handleFollow} disabled={isLoading} color={following} isUser={isUser}>{isLoading ? <Blocks
               visible={true}
               height="30"
               width="30"

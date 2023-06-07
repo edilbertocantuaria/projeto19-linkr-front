@@ -10,7 +10,8 @@ import {
     LoadingStyle, 
     PublishContainer, 
     TimelineContainer, 
-    Title 
+    Title, 
+    TitleContainer
 } from './style';
 import Post from './Post';
 import { useEffect, useState } from 'react';
@@ -20,7 +21,7 @@ import { useNavigate } from 'react-router';
 import ButtonFollow from '../button/ButtonFollow';
 
 
-export default function Posts({ username, userImage, userId, handleFollow, following, isLoading}) {
+export default function Posts({ username, userImage, userId, handleFollow, following, isLoading, isUser}) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -138,7 +139,6 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
             </FormPublishContainer>
         </PublishContainer>
         )}
-        {username ? <ButtonFollow handleFollow={handleFollow} following={following} isLoading={isLoading}></ButtonFollow> : <></>}
         {loadingScreen ? (
           <LoadingStyle>
             <p>Loading</p>
@@ -171,6 +171,8 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
           </EmptyStyle>
         )}
       </TimelineContainer>
+      {username ? <ButtonFollow handleFollow={handleFollow} following={following} 
+      isLoading={isLoading} isUser={isUser}></ButtonFollow> : <></>}
       <HashtagsContainer data-test="trending">
           <h1>trending</h1>
           <CustomHr />
