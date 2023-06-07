@@ -198,6 +198,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
         ) : posts.length > 0 ? (
           posts.map((post) => (
             <Post
+              data-test="post"
               key={post.id}
               TL={true}
               postId={post.id}
