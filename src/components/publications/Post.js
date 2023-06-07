@@ -16,11 +16,15 @@ import {
     DataText,
     EditingPost,
     Modal,
+    GeralCommContainer,
+    GeralCommAux,
     Overlay
 } from './style';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import apiUser from '../../services/apiUser';
+import Comment from '../comment/Comment';
+import InputComment from '../comment/InputComment';
 
 export default function Post({ post, isFilled, likesCount, handleLike, postId, TL }) {
     const [user, setUser] = useState(null);
@@ -28,6 +32,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
     const [ableToEdit, setAbleToEdit] = useState(false)
     const [saving, setSaving] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [comments, setComments] = useState([])
+    const [showCom, setShowCom] = useState(false)
 
     const navigate = useNavigate();
 
@@ -46,8 +52,6 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
             alert(err.response.data.message);
         }
     }
-
-
 
     useEffect(() => {
         if (post.userId) {
@@ -68,12 +72,11 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         if (TL) {
             if (post.article) {
                 if (post.article.includes("#")) {
-                    let regex=/#(\w+)/g;
-                    let palavras=[];
-                    for(let match of post.article.matchAll(regex)){
+                    let regex = /#(\w+)/g;
+                    let palavras = [];
+                    for (let match of post.article.matchAll(regex)) {
                         palavras.push(match[1])
                     }
-                    console.log("gpt",palavras)
                     if (palavras.length > 0) {
                         const addHashtags = async () => {
                             for (let i = 0; i < palavras.length; i++) {
@@ -81,8 +84,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                                     "postId": postId,
                                     "hashtag": palavras[i]
                                 })
-                                .then(res=>console.log(res.data))
-                                .catch(err=>console.log(err.message))
+                                    .then(res => console.log(res.data))
+                                    .catch(err => console.log(err.message))
                             }
                         };
                         addHashtags();
@@ -90,6 +93,12 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 }
             }
         }
+        axios.get(`${process.env.REACT_APP_API_URL}/comments/${postId}`)
+            .then(res => {
+                console.log(`comments post ${postId}`, res.data)
+                setComments(res.data)
+            })
+            .catch(err => console.log(err.message))
     }, [])
 
     const editingPostRef = useRef(null);
@@ -127,96 +136,108 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
     };
 
     return isUserLoaded ? (
-        <PostContainer data-test="post">
-            <UserContainer>
-                <UserImage
-                    src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
-                    style={{backgroundImage: `url(${user.image})`}}
-                    alt="userImage"
-                    onClick={() => getUserPage(user.username)}
-                />
-                <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
-                <p>
-                    {likesCount} {likesCount === 1 ? 'like' : 'likes'}
-                </p>
-            </UserContainer>
-            <ContentContainer>
-                <h3 data-test="username">
-                    <span onClick={() => getUserPage(user.username)}>
-                        {user ? user.username : "Unknown User"}</span>
-                    <div className='editANDdelete'>
-                        <EditPost
-                            onClick={() => editPost(post)}
-                            data-test="edit-btn"
-                        />
-                        <DeletePost
-                            onClick={handleOpenModal}
-                            data-test="delete-btn"
-                        />
+        <>
+            <PostContainer data-test="post">
+                <UserContainer>
+                    <UserImage
+                        src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
+                        style={{ backgroundImage: `url(${user.image})` }}
+                        alt="userImage"
+                        onClick={() => getUserPage(user.username)}
+                    />
+                    <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
+                    <p>
+                        {likesCount} {likesCount === 1 ? 'like' : 'likes'}
+                    </p>
+                    <p onClick={() => setShowCom(!showCom)}>
+                        {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
+                    </p>
+                </UserContainer>
+                <ContentContainer>
+                    <h3 data-test="username">
+                        <span onClick={() => getUserPage(user.username)}>
+                            {user ? user.username : "Unknown User"}</span>
+                        <div className='editANDdelete'>
+                            <EditPost
+                                onClick={() => editPost(post)}
+                                data-test="edit-btn"
+                            />
+                            <DeletePost
+                                onClick={handleOpenModal}
+                                data-test="delete-btn"
+                            />
 
-                        <Modal
-                            isOpen={showModal}
-                            onRequestClose={handleCloseModal}
-                            ariaHideApp={false}
-                        >
-
-                            <p>Are you sure you want to delete this post?</p>
-                            <div>
-                                <button className="cancelButton"  data-test="cancel" onClick={handleCloseModal}>No, go back</button>
-                                <button className="confirmButton"  data-test="confirm"  onClick={() => deletePost(post)}>Yes, delete it</button>
-                            </div>
-
-                        </Modal>
-
-                    </div>
-                </h3>
-                <p>
-                    {post.article && !(ableToEdit) ? (
-                        reactStringReplace(post.article, /#(\w+)/g, (match, i) => (
-                            <span
-                                data-test="description"
-                                key={i}
-                                onClick={() => {
-                                navigate(`/hashtag/${match.slice(0)}`);
-                                }}
+                            <Modal
+                                isOpen={showModal}
+                                onRequestClose={handleCloseModal}
+                                ariaHideApp={false}
                             >
-                                #{match}
-                            </span>
-                        ))
-                    ) : ""}
 
-                    {ableToEdit ? (
-                        <EditingPost
-                            defaultValue={post.article}
-                            autoFocus
-                            ref={editingPostRef}
-                            onClick={() => setAbleToEdit(false)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Escape') {
-                                    setAbleToEdit(false);
-                                } else if (e.key === 'Enter') {
-                                    e.preventDefault();
-                                    saveChanges();
-                                }
-                            }}
-                            disabled={saving}
-                        />
-                    ) : ""}
-                </p>
+                                <p>Are you sure you want to delete this post?</p>
+                                <div>
+                                    <button className="cancelButton" data-test="cancel" onClick={handleCloseModal}>No, go back</button>
+                                    <button className="confirmButton" data-test="confirm" onClick={() => deletePost(post)}>Yes, delete it</button>
+                                </div>
 
-                <DataStyle data-test="link" onClick={handleDataStyleClick}>
-                    <DataText>
-                        <p>{post.title}</p>
-                        <p>{post.description}</p>
-                        <p>{post.link}</p>
-                    </DataText>
+                            </Modal>
 
-                </DataStyle>
-            </ContentContainer>
+                        </div>
+                    </h3>
+                    <p>
+                        {post.article && !(ableToEdit) ? (
+                            reactStringReplace(post.article, /#(\w+)/g, (match, i) => (
+                                <span
+                                    data-test="description"
+                                    key={i}
+                                    onClick={() => {
+                                        navigate(`/hashtag/${match.slice(0)}`);
+                                    }}
+                                >
+                                    #{match}
+                                </span>
+                            ))
+                        ) : ""}
 
-        </PostContainer >
+                        {ableToEdit ? (
+                            <EditingPost
+                                defaultValue={post.article}
+                                autoFocus
+                                ref={editingPostRef}
+                                onClick={() => setAbleToEdit(false)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Escape') {
+                                        setAbleToEdit(false);
+                                    } else if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        saveChanges();
+                                    }
+                                }}
+                                disabled={saving}
+                            />
+                        ) : ""}
+                    </p>
+
+                    <DataStyle data-test="link" onClick={handleDataStyleClick}>
+                        <DataText>
+                            <p>{post.title}</p>
+                            <p>{post.description}</p>
+                            <p>{post.link}</p>
+                        </DataText>
+
+                    </DataStyle>
 
 
+                </ContentContainer>
 
+            </PostContainer >
+            {/* ----------------------- colocar img e username no lugar de userId  ------------*/}
+            {showCom ? (
+                <GeralCommContainer >
+                    {comments.map(c=><Comment text={c.comments}/>)}
+                    <InputComment postId={postId} userId={post.userId}/> 
+                </GeralCommContainer>
+            ) : <GeralCommAux/>}
+        </>
     ) : null;
 }
+

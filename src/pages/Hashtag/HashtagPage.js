@@ -27,13 +27,10 @@ export default function HashtagPage() {
         setAllHashtags(res.data)
       })
       .catch(err => console.log(err.message))
-    console.log(hashtag)
-    console.log("query",`${process.env.REACT_APP_API_URL}/hashtag/${hashtag.trim()}`)
 
     axios.get(`${process.env.REACT_APP_API_URL}/hashtag/${hashtag.trim()}`)
       .then(res => {
         setPosts(res.data)
-        console.log("POSTS",res.data)
       })
       .catch(err => console.log(err.message))
 
@@ -84,12 +81,14 @@ export default function HashtagPage() {
 const Container = styled.div`
   width: 100%;
   background-color: #333333;
-  min-height: calc(100vh - 72px);
+  min-height: calc(100vh);
   height: calc(100% - 72px);
   display: flex;
   justify-content: center;
   gap: 25px;
+  margin-top: 72px;
   @media (max-width: 600px) {
+    margin-top: 70px;
     flex-direction: column-reverse;
     justify-content: flex-end;
 }

@@ -193,7 +193,6 @@ export const PostContainer = styled.div`
   border-radius: 16px;
   padding: 15px;
   gap: 15px;
-  margin-bottom: 16px;
   max-width: 611px;
   @media (max-width: 600px) {
     width: 100%;
@@ -201,6 +200,22 @@ export const PostContainer = styled.div`
   }
 `;
 
+export const GeralCommContainer=styled.div`
+      /* margin-top: -13px ; */
+      display: flex;
+      flex-direction: column;
+      background-color: #1e1e1e;
+      margin-bottom: 44px;
+      border-bottom-right-radius:16px;
+      border-bottom-left-radius:16px;
+      padding:15px;
+      padding-top:0px ;
+      width: 611px;
+
+`;
+export const GeralCommAux=styled.div`
+      margin-bottom: 16px;
+`;
 export const UserImage = styled.img`
     width: 40px;
     height: 40px;
@@ -213,7 +228,7 @@ export const UserImage = styled.img`
       cursor: pointer;
       filter: brightness(70%);
     }
-`
+`;
 
 export const UserContainer = styled.div`
   display: flex;
@@ -227,9 +242,9 @@ export const UserContainer = styled.div`
     font-size: 9px;
     line-height: 11px;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 5px;
   }
-`
+`;
 
 export const StyledHeartIcon = styled(({ isfilled, ...props }) =>
   isfilled ? <AiFillHeart {...props} /> : <AiOutlineHeart {...props} />
