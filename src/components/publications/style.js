@@ -496,10 +496,7 @@ export const HashtagsContainer = styled.div`
     line-height: 40px;
   }
   @media (max-width: 600px) {
-    margin-top: 20px;
-    max-height: 164px;
-    padding: 6px;
-    width: 100%;
+    display: none;
   }
 `;
 export const CustomHr = styled.hr`
