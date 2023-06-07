@@ -46,10 +46,15 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
     }
   };
 
+  function getLoading() {
+    setLoadingScreen(false)
+  }
+
   const getCountPostsFriends = async () => {
     try {
       const response = await apiPosts.getFollowsUser(userIdLocalStorage);
       setCountPostsFriends(response.data);
+      setTimeout(getLoading, 1000)
     } catch (error) {
       console.error(error);
     }
@@ -106,13 +111,11 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
               const response = await apiPosts.getFollowsUser(Number(userIdLocalStorage));
               console.log(posts);
               setPosts(response.data);
-              setLoadingScreen(false);
               console.log("posts:", posts);
              
               console.log(apiPosts.getFollowsUser)
             } catch (error) {
               console.error(error);
-              setLoadingScreen(false);
             }
         }
         fetchPosts();
@@ -206,7 +209,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
           ))
         ) : (
           <EmptyStyle>
-            <p data-test="message">No posts found from your friends.</p>
+            <p data-test="message">There are no posts yet :(</p>
           </EmptyStyle>
         )}
       </TimelineContainer>
