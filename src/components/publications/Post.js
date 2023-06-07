@@ -126,6 +126,10 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
         setShowDeleteModal(true);
     };
 
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+    };
+
     const handleOpenRepostModal = () => {
         setShowRepostModal(true);
     };
@@ -136,10 +140,9 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
 
     return isUserLoaded ? (
         <>
-                <Reposted>
-                    <SharePost className='repostedBold'/> <p>Re-posted by <span>you</span></p>
-                </Reposted>
-
+            <Reposted>
+                <SharePost className='repostedBold' /> <p>Re-posted by <span>you</span></p>
+            </Reposted>
             <PostContainer data-test="post">
                 <UserContainer>
                     <UserImage
