@@ -7,11 +7,11 @@ export default function Comment(props) {
                 <UserContainer>
                     <UserImage
                         src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
-                        style={{ backgroundImage: `url(https://global-uploads.webflow.com/59dbe1c3542805000192616b/63178a7970d1b57a4c6a7a05_golden-retriever.png)` }}
+                        style={{ backgroundImage: `url(${props.img})` }}
                         alt="userImage"
                     />
                     <AuxComContainer>
-                        <p>João Tavares</p>
+                        <p>{props.username}</p>
                         <span>{props.text}</span>
                     </AuxComContainer>
                 </UserContainer>

@@ -26,6 +26,10 @@ export default function InputComment(props) {
             })
             .catch(err => console.log(err.message))
             setText("")
+            console.log("antes",props.loadComments)
+
+            props.setLoadComments(!props.loadComments)
+            console.log("dps",props.loadComments)
     }
 
     return (
@@ -35,7 +39,7 @@ export default function InputComment(props) {
                 style={{ backgroundImage: `url(${img})` }}
                 alt="userImage"
             />
-            <CommInput placeholder="write a comment..." onChange={e => input(e)} />
+            <CommInput placeholder="write a comment..." onChange={e => input(e)} value={text}/>
             <FiSend
                 size="15px"
                 color="white"
