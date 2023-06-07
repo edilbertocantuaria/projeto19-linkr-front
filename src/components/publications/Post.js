@@ -2,14 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import reactStringReplace from 'react-string-replace'
 import linkrLogo from '../../assets/linkrLogo.png';
 
-
-
 import {
     ContentContainer,
+    Reposted,
     PostContainer,
     UserImage,
     StyledHeartIcon,
     EditPost,
+    CommentPost,
+    SharePost,
     DeletePost,
     UserContainer,
     DataStyle,
@@ -26,7 +27,7 @@ import apiUser from '../../services/apiUser';
 import Comment from '../comment/Comment';
 import InputComment from '../comment/InputComment';
 
-export default function Post({ post, isFilled, likesCount, handleLike, postId, TL }) {
+export default function Post({ post, isFilled, likesCount, commentsCount, isCommented, sharesCount, isShared, handleLike, postId, TL }) {
     const [user, setUser] = useState(null);
     const [isUserLoaded, setIsUserLoaded] = useState(false);
     const [ableToEdit, setAbleToEdit] = useState(false)
@@ -34,6 +35,11 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
     const [showModal, setShowModal] = useState(false);
     const [comments, setComments] = useState([])
     const [showCom, setShowCom] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showRepostModal, setShowRepostModal] = useState(false);
+    const [isfilled, setIsfilled] = useState(false);
+    const [issharer, setIsshared] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -66,7 +72,6 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                 });
         }
     }, [post.userId]);
-
 
     useEffect(() => {
         if (TL) {
@@ -117,26 +122,42 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         setSaving(false);
     };
 
-
     function deletePost(post) {
-
         console.log("clicando para excluir post");
-        setShowModal(true)
-
         //IMPLEMENTAR AS REQUISIÇÕES AQUI
-        console.log(post)
+        console.log(post);
+        handleCloseDeleteModal();
     }
 
-    const handleOpenModal = () => {
-        setShowModal(true);
+    function sharePost(post) {
+        console.log("clicando para repostar post");
+        console.log(post);
+        handleCloseRepostModal();
+    }
+
+    const handleOpenDeleteModal = () => {
+        setShowDeleteModal(true);
     };
 
-    const handleCloseModal = () => {
-        setShowModal(false);
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+    };
+
+    const handleOpenRepostModal = () => {
+        setShowRepostModal(true);
+    };
+
+    const handleCloseRepostModal = () => {
+        setShowRepostModal(false);
     };
 
     return isUserLoaded ? (
         <>
+
+            <Reposted>
+                <SharePost className='repostedBold' /> <p>Re-posted by <span>you</span></p>
+            </Reposted>
+
             <PostContainer data-test="post">
                 <UserContainer>
                     <UserImage
@@ -145,13 +166,34 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                         alt="userImage"
                         onClick={() => getUserPage(user.username)}
                     />
-                    <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
-                    <p>
-                        {likesCount} {likesCount === 1 ? 'like' : 'likes'}
-                    </p>
-                    <p onClick={() => setShowCom(!showCom)}>
-                        {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
-                    </p>
+
+                    <div className="interactions">
+                        <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
+                        <p>
+                            {likesCount} {likesCount === 1 ? 'like' : 'likes'}
+                        </p>
+                        <CommentPost iscommented={isCommented} onClick={() => setShowCom(!showCom)} data-test="comment-btn" />
+                        <p data-test="comment-counter" >
+                            {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
+                        </p>
+                        <SharePost isshared={isShared} onClick={handleOpenRepostModal} data-test="repost-btn" />
+                        <p data-test="repost-counter">
+                            {sharesCount} {sharesCount === 1 || sharesCount === 0 ? 're-post' : 're-posts'}
+                        </p>
+
+                        <Modal
+                            isOpen={showRepostModal}
+                            onRequestClose={handleCloseRepostModal}
+                            ariaHideApp={false}
+                        >
+                            <p>Do you want to re-post this link?</p>
+                            <div>
+                                <button className="cancelButton" data-test="cancel" onClick={handleCloseRepostModal}>No, cancel</button>
+                                <button className="confirmButton" data-test="confirm" onClick={() => sharePost(post)}>Yes, share!</button>
+                            </div>
+                        </Modal>
+                    </div>
+
                 </UserContainer>
                 <ContentContainer>
                     <h3 data-test="username">
@@ -163,22 +205,22 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                                 data-test="edit-btn"
                             />
                             <DeletePost
-                                onClick={handleOpenModal}
+
+                                onClick={handleOpenDeleteModal}
                                 data-test="delete-btn"
                             />
 
                             <Modal
-                                isOpen={showModal}
-                                onRequestClose={handleCloseModal}
+
+                                isOpen={showDeleteModal}
+                                onRequestClose={handleCloseDeleteModal}
                                 ariaHideApp={false}
                             >
-
                                 <p>Are you sure you want to delete this post?</p>
                                 <div>
-                                    <button className="cancelButton" data-test="cancel" onClick={handleCloseModal}>No, go back</button>
+                                    <button className="cancelButton" data-test="cancel" onClick={handleCloseDeleteModal}>No, go back</button>
                                     <button className="confirmButton" data-test="confirm" onClick={() => deletePost(post)}>Yes, delete it</button>
                                 </div>
-
                             </Modal>
 
                         </div>
@@ -224,6 +266,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                             <p>{post.link}</p>
                         </DataText>
 
+
                     </DataStyle>
 
 
@@ -240,4 +283,5 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         </>
     ) : null;
 }
+
 

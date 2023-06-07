@@ -109,9 +109,7 @@ export const SearchInput = styled(DebounceInput)`
     font-size: 16px;
     background: #FFFFFF;
     border: none;
-    border-radius: ${({ isOpen }) => (isOpen ? "" : "8px")};
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-radius: 8px;
     margin: auto;
     &::placeholder {
       font-family: 'Lato';
@@ -135,8 +133,8 @@ export const Dropdown = styled.ul`
   padding: 0;
   margin-top: 5px;
   color: black;
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  max-height: ${({ isOpen }) => (isOpen ? '200px' : 0)};
+  opacity: ${props => props.isOpen ? 1 : 0};
+  max-height: ${props => props.isOpen ? '200px' : 0};
   transition: opacity 300ms ease, max-height 300ms ease;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -163,7 +161,14 @@ export const UserItem = styled.li`
     font-size: 16px;
     color: #515151;
   }
-
+  span:nth-child(3) {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #1877f2;
+    margin-left: 5px;
+  }
   &:hover {
     background-color: #BDBDBD;
   }

@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from 'react-icons/ai';
 import { BsPencil } from 'react-icons/bs';
-import { BiTrash } from "react-icons/bi"
+import { BiTrash, BiRepost } from "react-icons/bi"
 import { Link } from 'react-router-dom';
 import ReactModal from 'react-modal';
 
@@ -186,6 +186,43 @@ export const heartBeatAnimation = keyframes`
   }
 `;
 
+export const Reposted = styled.div`
+display: flex;
+color: white;
+flex-direction: row;
+align-items: flex-start;
+
+background-color: #484848;
+border-radius: 16px;
+padding: 10px;
+gap: 5px;
+height: 80px;
+
+align-items: flex-start;
+margin-bottom: -50px;
+
+
+max-width: 611px;
+@media (max-width: 600px) {
+  width: 100%;
+  border-radius: 0;
+}
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+
+.repostedBold{
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: -4px;
+}
+span{
+  font-weight: bold;
+}
+
+
+`
 export const PostContainer = styled.div`
   display: flex;
   color: white;
@@ -235,33 +272,53 @@ export const UserContainer = styled.div`
   flex-direction: column;
   text-align: center;
   align-items: center;
-  p{
-    font-family: 'Lato';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 9px;
-    line-height: 11px;
-    text-align: center;
-    margin-top: 5px;
-  }
-`;
 
-export const StyledHeartIcon = styled(({ isfilled, ...props }) =>
-  isfilled ? <AiFillHeart {...props} /> : <AiOutlineHeart {...props} />
-)`
-  font-size: 17px;
-  cursor: pointer;
-  color: ${props => (props.isfilled ? 'red' : 'white')};
-  animation: ${props => (props.isfilled ? heartBeatAnimation : 'none')} 0.5s
-    ease-in-out;
-`;
+    .interactions{
+      align-items: center;
+      justify-content: space-around;
+      p{
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 9px;
+        line-height: 11px;
+        text-align: center;
+        margin-bottom: 5px;
+        }
+
+
+    }
+
+`
+
 
 export const EditPost = styled(BsPencil)`
 font-size: 16px;
 cursor: pointer;
 color: #FFFFFF;
 margin-right: 10px;
+`;
 
+export const CommentPost = styled(AiOutlineComment)`
+font-size: 16px;
+cursor: pointer;
+color: #FFFFFF;
+`;
+
+export const StyledHeartIcon = styled(({ isfilled, ...props }) =>
+  isfilled ? <AiFillHeart {...props} /> : <AiOutlineHeart {...props} />
+)`
+  font-size: 16px;
+  cursor: pointer;
+  color: ${props => (props.isfilled ? 'red' : 'white')};
+  animation: ${props => (props.isfilled ? heartBeatAnimation : 'none')} 0.5s
+    ease-in-out;
+`;
+
+export const SharePost = styled(BiRepost)`
+font-size: 16px;
+cursor: pointer;
+color: ${props => (props.isshared ? '#40EF02' : '#FFFFFF')};
 `;
 
 export const DeletePost = styled(BiTrash)`
@@ -389,6 +446,7 @@ export const DataText = styled.div`
 export const Modal = styled(ReactModal)`
   width: 42%;
   height: 25.6%;
+  z-index: 80;
 
   @media (max-width: 600px) {
     width: 80%;

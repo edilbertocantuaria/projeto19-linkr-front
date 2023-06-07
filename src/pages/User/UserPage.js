@@ -9,10 +9,10 @@ import axios from "axios";
 export default function UserPage() {
     const { id } = useParams();
     const [following, setFollowing] = useState(false);
-    const [follower, setFollower] = useState()
     const [user, setUser] = useState([]);
     const [loadingScreen, setLoadingScreen] = useState(true);
     const [isLoading, setIsLoading] = useState(false)
+    const [isUser, setIsUser] = useState(false)
 
     const idFromLocalStorage = localStorage.getItem("userId");
 
@@ -36,20 +36,23 @@ export default function UserPage() {
     useEffect(() => {
         apiUser.getUser(id)
         .then((response) => {
-            const userData = response.data.user;
-            const followers = response.data.followers.rows;
-            const follower = followers.find(f => Number(f.followerId) === Number(idFromLocalStorage));
-            if (follower) {
-                setFollower(follower);
-                setFollowing(true);
+            if (idFromLocalStorage === id) {
+                setIsUser(true)
+            } else {
+                const followers = response.data.followers.rows;
+                const follower = followers.find(f => Number(f.followerId) === Number(idFromLocalStorage));
+                if (follower) {
+                    setFollowing(true);
+                }
             }
+            const userData = response.data.user;
             setUser(userData);
             setLoadingScreen(false);
         })
         .catch((error) => {
             console.log(error);
         });
-    }, [])
+    }, [id])
 
     return (
         <>
@@ -70,8 +73,9 @@ export default function UserPage() {
             </LoadingStyle>
           </LoadingContainer>
         ) : (
-            <Posts username={user.username} userId={id} 
-            handleFollow={handleFollow} following={following} isLoading={isLoading}></Posts>
+            <Posts user={user} userId={id} 
+            handleFollow={handleFollow} following={following} isLoading={isLoading}
+            isUser={isUser}></Posts>
         )}
         </>
     )
