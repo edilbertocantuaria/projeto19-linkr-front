@@ -68,12 +68,11 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
         if (TL) {
             if (post.article) {
                 if (post.article.includes("#")) {
-                    let regex=/#(\w+)/g;
-                    let palavras=[];
-                    for(let match of post.article.matchAll(regex)){
+                    let regex = /#(\w+)/g;
+                    let palavras = [];
+                    for (let match of post.article.matchAll(regex)) {
                         palavras.push(match[1])
                     }
-                    console.log("gpt",palavras)
                     if (palavras.length > 0) {
                         const addHashtags = async () => {
                             for (let i = 0; i < palavras.length; i++) {
@@ -81,8 +80,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                                     "postId": postId,
                                     "hashtag": palavras[i]
                                 })
-                                .then(res=>console.log(res.data))
-                                .catch(err=>console.log(err.message))
+                                    .then(res => console.log(res.data))
+                                    .catch(err => console.log(err.message))
                             }
                         };
                         addHashtags();
@@ -131,7 +130,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
             <UserContainer>
                 <UserImage
                     src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
-                    style={{backgroundImage: `url(${user.image})`}}
+                    style={{ backgroundImage: `url(${user.image})` }}
                     alt="userImage"
                     onClick={() => getUserPage(user.username)}
                 />
@@ -162,8 +161,8 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
 
                             <p>Are you sure you want to delete this post?</p>
                             <div>
-                                <button className="cancelButton"  data-test="cancel" onClick={handleCloseModal}>No, go back</button>
-                                <button className="confirmButton"  data-test="confirm"  onClick={() => deletePost(post)}>Yes, delete it</button>
+                                <button className="cancelButton" data-test="cancel" onClick={handleCloseModal}>No, go back</button>
+                                <button className="confirmButton" data-test="confirm" onClick={() => deletePost(post)}>Yes, delete it</button>
                             </div>
 
                         </Modal>
@@ -177,7 +176,7 @@ export default function Post({ post, isFilled, likesCount, handleLike, postId, T
                                 data-test="description"
                                 key={i}
                                 onClick={() => {
-                                navigate(`/hashtag/${match.slice(0)}`);
+                                    navigate(`/hashtag/${match.slice(0)}`);
                                 }}
                             >
                                 #{match}
