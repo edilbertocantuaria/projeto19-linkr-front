@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router';
 import ButtonFollow from '../button/ButtonFollow';
 
 
-export default function Posts({ username, userImage, userId, handleFollow, following, isLoading, isUser}) {
+export default function Posts({ user, userId, handleFollow, following, isLoading, isUser}) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -40,7 +40,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
   const getCountFriends = async () => {
     try {
       const response = await apiPosts.CountFriends(userIdLocalStorage);
-      setCountFriends(response.data);
+      setCountFriends(response.data.followers);
     } catch (error) {
       console.error(error);
     }
@@ -102,8 +102,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
   }, [])
 
   useEffect(() => {
-    console.log(username)
-    if (username === undefined) {
+    if (!user) {
         async function fetchPosts()  {
             try {
               console.log("aqui")
@@ -119,10 +118,9 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
             }
         }
         fetchPosts();
-    } else if (username) {
+    } else if (user) {
         async function fetchUserPosts() {
             try {
-                console.log(userId)
                 const response = await apiPosts.getUserPosts(Number(userId));
                 setPosts(response.data);
                 setLoadingScreen(false);
@@ -133,12 +131,13 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
         }
         fetchUserPosts();
     }
-  }, [isPublishing]);
+  }, [isPublishing, user]);
   return (
     <Container>
       <TimelineContainer>
-        <Title>{username ? `${username}'s posts` : "timeline"}</Title>
-        {username ? (
+        {user ? <Title>{user.username}'s posts</Title> : user===undefined ? <Title>timeline</Title> 
+        : <></>}
+        {user ? (
           <></>
         ) : (
           <PublishContainer data-test="publish-box">
@@ -187,14 +186,6 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
               visible={true}
             />
           </LoadingStyle>
-        ) : countFriends.length === 0 ? (
-          <EmptyStyle>
-            <p data-test="message">You don't follow anyone yet. Search for new friends.</p>
-          </EmptyStyle>
-        ) : countPostsFriends.length === 0 ? (
-          <EmptyStyle>
-            <p data-test="message">No posts found from your friends.</p>
-          </EmptyStyle>
         ) : posts.length > 0 ? (
           posts.map((post) => (
             <Post
@@ -208,13 +199,23 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
               handleLike={handleLike}
             />
           ))
-        ) : (
+        ) : user ? (
           <EmptyStyle>
             <p data-test="message">There are no posts yet :(</p>
           </EmptyStyle>
+        ) : countFriends.length === 0 ? (
+          <EmptyStyle>
+            <p data-test="message">You don't follow anyone yet. Search for new friends.</p>
+          </EmptyStyle>
+        ) : countPostsFriends.length === 0 ? (
+          <EmptyStyle>
+            <p data-test="message">No posts found from your friends.</p>
+          </EmptyStyle>
+        ) : (
+          <></>
         )}
       </TimelineContainer>
-      {username ? <ButtonFollow handleFollow={handleFollow} following={following} 
+      {user ? <ButtonFollow handleFollow={handleFollow} following={following} 
       isLoading={isLoading} isUser={isUser}></ButtonFollow> : <></>}
       <HashtagsContainer data-test="trending">
         <h1>trending</h1>
