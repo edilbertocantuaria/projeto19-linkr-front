@@ -28,8 +28,36 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
   const [posts, setPosts] = useState([]);
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [allHashtags, setAllHashtags] = useState([]);
+  const userIdLocalStorage = localStorage.getItem('userId');
+  const [countFriends, setCountFriends] = useState([]);
+  const [countPostsFriends, setCountPostsFriends] = useState([]);
+
+  console.log(userIdLocalStorage)
 
   const navigate = useNavigate();
+
+  const getCountFriends = async () => {
+    try {
+      const response = await apiPosts.CountFriends(userIdLocalStorage);
+      setCountFriends(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getCountPostsFriends = async () => {
+    try {
+      const response = await apiPosts.getFollowsUser(userIdLocalStorage);
+      setCountPostsFriends(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCountFriends();
+    getCountPostsFriends();
+  }, []);
 
   const handleForm = (e) => {
     console.log(e.target.value)
@@ -72,11 +100,15 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
     if (username === undefined) {
         async function fetchPosts()  {
             try {
-              const response = await apiPosts.getPosts();
+              console.log("aqui")
+              console.log(userId)
+              const response = await apiPosts.getFollowsUser(Number(userIdLocalStorage));
               console.log(posts);
               setPosts(response.data);
               setLoadingScreen(false);
               console.log("posts:", posts);
+             
+              console.log(apiPosts.getFollowsUser)
             } catch (error) {
               console.error(error);
               setLoadingScreen(false);
@@ -102,43 +134,43 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
     <Container>
       <TimelineContainer>
         <Title>{username ? `${username}'s posts` : "timeline"}</Title>
-        {username ? <></> : (
-        <PublishContainer
-        data-test="publish-box"
-        >
-        <img
-            src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
-            style={{backgroundImage: `url(${localStorage.getItem("image")})`}}
-            alt="userImage"
+        {username ? (
+          <>
+            <ButtonFollow handleFollow={handleFollow} following={following} isLoading={isLoading} />
+          </>
+        ) : (
+          <PublishContainer data-test="publish-box">
+            <img
+              src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
+              style={{ backgroundImage: `url(${localStorage.getItem("image")})` }}
+              alt="userImage"
             />
             <FormPublishContainer>
-            <p>What are you going to share today?</p>
-            <form onSubmit={handleSubmit}>
+              <p>What are you going to share today?</p>
+              <form onSubmit={handleSubmit}>
                 <input
-                placeholder="http://..."
-                name="link"
-                data-test="link"
-                value={form.link}
-                onChange={handleForm}
-                disabled={isPublishing}
+                  placeholder="http://..."
+                  name="link"
+                  data-test="link"
+                  value={form.link}
+                  onChange={handleForm}
+                  disabled={isPublishing}
                 />
                 <textarea
-                placeholder="Awesome article about #javascript"
-                name="article"
-                data-text="description"
-                value={form.article || ''}
-                onChange={handleForm}
-                disabled={isPublishing}
+                  placeholder="Awesome article about #javascript"
+                  name="article"
+                  data-text="description"
+                  value={form.article || ''}
+                  onChange={handleForm}
+                  disabled={isPublishing}
                 />
-                <button type="submit" disabled={isPublishing}
-                data-test="publish-btn">
-                {isPublishing ? 'Publishing...' : 'Publish'}
+                <button type="submit" disabled={isPublishing} data-test="publish-btn">
+                  {isPublishing ? 'Publishing...' : 'Publish'}
                 </button>
-            </form>
+              </form>
             </FormPublishContainer>
-        </PublishContainer>
+          </PublishContainer>
         )}
-        {username ? <ButtonFollow handleFollow={handleFollow} following={following} isLoading={isLoading}></ButtonFollow> : <></>}
         {loadingScreen ? (
           <LoadingStyle>
             <p>Loading</p>
@@ -153,6 +185,14 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
               visible={true}
             />
           </LoadingStyle>
+        ) : countFriends.length === 0 ? (
+          <EmptyStyle>
+            <p data-test="message">You don't follow anyone yet. Search for new friends.</p>
+          </EmptyStyle>
+        ) : countPostsFriends.length === 0 ? (
+          <EmptyStyle>
+            <p data-test="message">No posts found from your friends.</p>
+          </EmptyStyle>
         ) : posts.length > 0 ? (
           posts.map((post) => (
             <Post
@@ -167,31 +207,31 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
           ))
         ) : (
           <EmptyStyle>
-            <p data-test="message">There are no posts yet :(</p>
+            <p data-test="message">No posts found from your friends.</p>
           </EmptyStyle>
         )}
       </TimelineContainer>
       <HashtagsContainer data-test="trending">
-          <h1>trending</h1>
-          <CustomHr />
-          <AuxHashContainer>
-            {allHashtags.map(h =>
-              <p >
-                {
-                  reactStringReplace(`#${h.hashtag}`, /#(\w+)/g, (match, i) => (
-                  <span
-                    key={i}
-                    onClick={() => {
-                      navigate(`/hashtag/${match.slice(0)}`, { replace: true });
-                    }}
-                  >
-                    #{match}
-                  </span>
-                ))
-                }
-              </p>)}
-          </AuxHashContainer>
-        </HashtagsContainer>
+        <h1>trending</h1>
+        <CustomHr />
+        <AuxHashContainer>
+          {allHashtags.map((h) => (
+            <p>
+              {reactStringReplace(`#${h.hashtag}`, /#(\w+)/g, (match, i) => (
+                <span
+                  key={i}
+                  onClick={() => {
+                    navigate(`/hashtag/${match.slice(0)}`, { replace: true });
+                  }}
+                >
+                  #{match}
+                </span>
+              ))}
+            </p>
+          ))}
+        </AuxHashContainer>
+      </HashtagsContainer>
     </Container>
   );
+  
 }
