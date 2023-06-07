@@ -12,9 +12,11 @@ function getPosts() {
     return promise;
 }
 
-function getUserPosts(id) {
+function getUserPosts(id, page) {
     const promise = axios.get(`
-    ${process.env.REACT_APP_API_URL}/timeline/${id}`);
+    ${process.env.REACT_APP_API_URL}/timeline/${id}`, {
+        params: { page },
+    });
     return promise;
 }
 
