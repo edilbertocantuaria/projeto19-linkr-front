@@ -13,7 +13,7 @@ function getPosts() {
 }
 
 function getUserPosts(id, page) {
-    const promise = axios.get(`
+    const promise = axios.get(` 
     ${process.env.REACT_APP_API_URL}/timeline/${id}`, {
         params: { page },
     });
@@ -30,6 +30,7 @@ function CountFriends(id) {
     const promise = axios.get(`${process.env.REACT_APP_API_URL}/followers/${id}`);
     return promise;
 }
+
 
 const apiPosts = { postLink, getPosts, getUserPosts, getFollowsUser, CountFriends };
 export default apiPosts;

@@ -158,6 +158,7 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
     setPage(nextPage);
   };
 
+
   return (
     <Container>
       <TimelineContainer>

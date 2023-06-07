@@ -74,7 +74,6 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                     for (let match of post.article.matchAll(regex)) {
                         palavras.push(match[1])
                     }
-
                     if (palavras.length > 0) {
                         const addHashtags = async () => {
                             for (let i = 0; i < palavras.length; i++) {
