@@ -9,7 +9,7 @@ export default function ButtonFollow({handleFollow, following, isLoading}) {
     return (
         
         <>
-            <Button onClick={handleFollow} disabled={isLoading} color={following}>{isLoading ? <Blocks
+            <Button onClick={handleFollow}  data-test="follow-btn" disabled={isLoading} color={following}>{isLoading ? <Blocks
               visible={true}
               height="30"
               width="30"
