@@ -1,6 +1,6 @@
 import { ThreeDots } from 'react-loader-spinner';
-import InfiniteScroll from 'react-infinite-scroller'; // Importa a biblioteca react-infinite-scroller
-import apiPosts from '../../services/apiPosts'
+import InfiniteScroll from 'react-infinite-scroller';
+import apiPosts from '../../services/apiPosts';
 import {
   AuxHashContainer,
   Container,
@@ -16,9 +16,9 @@ import {
 import Post from './Post';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import reactStringReplace from 'react-string-replace';
 import { useNavigate } from 'react-router';
 import ButtonFollow from '../button/ButtonFollow';
+import reactStringReplace from 'react-string-replace';
 
 export default function Posts({ username, userImage, userId, handleFollow, following, isLoading }) {
   const [isPublishing, setIsPublishing] = useState(false);
@@ -28,14 +28,13 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
   const [posts, setPosts] = useState([]);
   const [loadingScreen, setLoadingScreen] = useState(true);
   const [allHashtags, setAllHashtags] = useState([]);
-  const [hasMorePosts, setHasMorePosts] = useState(true); // Nova variável de estado para controlar se existem mais posts para carregar
-  const [page, setPage] = useState(1); // Nova variável de estado para controlar o número da página atual
-
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [page, setPage] = useState(1);
+  const [isFetching, setIsFetching] = useState(false);
 
   const navigate = useNavigate();
 
   const handleForm = (e) => {
-    console.log(e.target.value)
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -65,10 +64,15 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/hashtags`)
       .then(res => {
-        setAllHashtags(res.data)
+        setAllHashtags(res.data);
       })
-      .catch(err => console.log(err.message))
-  }, [])
+      .catch(err => console.log("hashtags error:", err.message));
+  }, []);
+
+  useEffect(() => {
+    console.log("allHashtags:", allHashtags);
+  }, [allHashtags]);
+
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -84,30 +88,40 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
         console.log("response:", response.data);
         console.log("page:", page);
         console.log("response.data.length:", response.data.length);
-        console.log("Has more posts?", hasMorePosts)
-        console.log("posts:", posts)
+        console.log("Has more posts?", hasMorePosts);
+        console.log("posts:", posts);
 
         if (response.data.length === 0) {
           setHasMorePosts(false);
+          return;
         } else {
-          setPosts(response.data);
+          setPosts((prevPosts) => {
+            const newPosts = [...prevPosts, ...response.data];
+            console.log("prevPosts:", newPosts);
+            return newPosts;
+          });
           setLoadingScreen(false);
+          setHasMorePosts(true);
         }
       } catch (error) {
         console.error(error);
         setLoadingScreen(false);
+      } finally {
+        setIsFetching(false);
       }
     };
 
     fetchPosts();
-  }, [page, username, userId]);
-
+  }, [page]);
 
   const loadMorePosts = () => {
-    if (!hasMorePosts) {
-      return
+    if (!hasMorePosts || isFetching) {
+      return;
     }
-    console.log("hasmorePosts:", hasMorePosts)
+
+    setIsFetching(true);
+
+    console.log("hasmorePosts:", hasMorePosts);
     const nextPage = page + 1;
     setPage(nextPage);
   };
@@ -142,8 +156,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
                   onChange={handleForm}
                   disabled={isPublishing}
                 />
-                <button type="submit" disabled={isPublishing}
-                  data-test="publish-btn">
+                <button type="submit" disabled={isPublishing} data-test="publish-btn">
                   {isPublishing ? 'Publishing...' : 'Publish'}
                 </button>
               </form>
@@ -170,6 +183,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
             pageStart={1}
             loadMore={loadMorePosts}
             hasMore={hasMorePosts}
+            initialLoad={false}
             loader={
               <LoadingStyle key={0}>
                 <p>Loading</p>
@@ -209,23 +223,26 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
       <HashtagsContainer data-test="trending">
         <h1>trending</h1>
         <CustomHr />
-        <AuxHashContainer>
-          {allHashtags.map(h =>
-            <p >
-              {
-                reactStringReplace(`#${h.hashtag}`, /#(\w+)/g, (match, i) => (
+        {allHashtags.length > 0 ? (
+          <AuxHashContainer>
+            {allHashtags.map((h, i) => (
+              <p key={i}>
+                {reactStringReplace(`#${h.hashtag}`, /#(\w+)/g, (match, j) => (
                   <span
-                    key={i}
+                    key={j}
                     onClick={() => {
                       navigate(`/hashtag/${match.slice(0)}`, { replace: true });
                     }}
                   >
                     #{match}
                   </span>
-                ))
-              }
-            </p>)}
-        </AuxHashContainer>
+                ))}
+              </p>
+            ))}
+          </AuxHashContainer>
+        ) : (
+          <p>Loading hashtags...</p>
+        )}
       </HashtagsContainer>
     </Container>
   );
