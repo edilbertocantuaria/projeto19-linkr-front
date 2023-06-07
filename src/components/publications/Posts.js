@@ -10,7 +10,8 @@ import {
     LoadingStyle, 
     PublishContainer, 
     TimelineContainer, 
-    Title 
+    Title, 
+    TitleContainer
 } from './style';
 import Post from './Post';
 import { useEffect, useState } from 'react';
@@ -20,7 +21,7 @@ import { useNavigate } from 'react-router';
 import ButtonFollow from '../button/ButtonFollow';
 
 
-export default function Posts({ username, userImage, userId, handleFollow, following, isLoading}) {
+export default function Posts({ username, userImage, userId, handleFollow, following, isLoading, isUser}) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -45,10 +46,15 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
     }
   };
 
+  function getLoading() {
+    setLoadingScreen(false)
+  }
+
   const getCountPostsFriends = async () => {
     try {
       const response = await apiPosts.getFollowsUser(userIdLocalStorage);
       setCountPostsFriends(response.data);
+      setTimeout(getLoading, 1000)
     } catch (error) {
       console.error(error);
     }
@@ -105,13 +111,11 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
               const response = await apiPosts.getFollowsUser(Number(userIdLocalStorage));
               console.log(posts);
               setPosts(response.data);
-              setLoadingScreen(false);
               console.log("posts:", posts);
              
               console.log(apiPosts.getFollowsUser)
             } catch (error) {
               console.error(error);
-              setLoadingScreen(false);
             }
         }
         fetchPosts();
@@ -135,9 +139,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
       <TimelineContainer>
         <Title>{username ? `${username}'s posts` : "timeline"}</Title>
         {username ? (
-          <>
-            <ButtonFollow handleFollow={handleFollow} following={following} isLoading={isLoading} />
-          </>
+          <></>
         ) : (
           <PublishContainer data-test="publish-box">
             <img
@@ -207,10 +209,12 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
           ))
         ) : (
           <EmptyStyle>
-            <p data-test="message">No posts found from your friends.</p>
+            <p data-test="message">There are no posts yet :(</p>
           </EmptyStyle>
         )}
       </TimelineContainer>
+      {username ? <ButtonFollow handleFollow={handleFollow} following={following} 
+      isLoading={isLoading} isUser={isUser}></ButtonFollow> : <></>}
       <HashtagsContainer data-test="trending">
         <h1>trending</h1>
         <CustomHr />

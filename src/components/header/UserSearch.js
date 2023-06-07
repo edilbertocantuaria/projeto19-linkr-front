@@ -12,16 +12,26 @@ export default function UserSearch() {
   const [value, setValue] = useState('');
   const [results, setResults] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const userIdLocalStorage = localStorage.getItem('userId')
 
   useEffect(() => {
       async function getUsers() {
           try {
-              const users = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
+              const response = await axios.get(`${process.env.REACT_APP_API_URL}/followers/${userIdLocalStorage}`);
               const options = [];
-              users.data.map ((u, id) => {
-                  const user = {id: id, name: u.username, image: u.image};
-                  return options.push(user);
-              });
+              response.data.followers.forEach(f => {
+                const follower = response.data.users.find(u => u.id === f.followedId);
+                if (follower) {
+                  const user = {id: follower.id, name: follower.username, image: follower.image, follower: true};
+                  options.push(user);
+                }
+              })
+              response.data.users.forEach(u => {
+                if(!response.data.followers.find(f => u.id === f.followedId)) {
+                  const user = {id: u.id, name: u.username, image: u.image, follower: false};
+                  options.push(user);
+                }
+              })
               setUsersInfo(options)
           } catch (err) {
               console.log(err);
@@ -107,6 +117,7 @@ export default function UserSearch() {
             >
               <div style={{backgroundImage: `url(${user.image})`}} alt={user.name}></div>
               <span>{user.name.slice(0,10)}</span>
+              {user.follower ? <span>• following</span> : <></>}
             </UserItem>
           ))}
         </Dropdown>
