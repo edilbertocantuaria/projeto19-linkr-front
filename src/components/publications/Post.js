@@ -17,21 +17,29 @@ import {
     DataText,
     EditingPost,
     Modal,
+    GeralCommContainer,
+    GeralCommAux,
     Overlay
 } from './style';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import apiUser from '../../services/apiUser';
+import Comment from '../comment/Comment';
+import InputComment from '../comment/InputComment';
 
 export default function Post({ post, isFilled, likesCount, commentsCount, isCommented, sharesCount, isShared, handleLike, postId, TL }) {
     const [user, setUser] = useState(null);
     const [isUserLoaded, setIsUserLoaded] = useState(false);
     const [ableToEdit, setAbleToEdit] = useState(false)
     const [saving, setSaving] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [comments, setComments] = useState([])
+    const [showCom, setShowCom] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showRepostModal, setShowRepostModal] = useState(false);
     const [isfilled, setIsfilled] = useState(false);
     const [issharer, setIsshared] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -90,6 +98,12 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                 }
             }
         }
+        axios.get(`${process.env.REACT_APP_API_URL}/comments/${postId}`)
+            .then(res => {
+                console.log(`comments post ${postId}`, res.data)
+                setComments(res.data)
+            })
+            .catch(err => console.log(err.message))
     }, [])
 
     const editingPostRef = useRef(null);
@@ -139,9 +153,11 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
 
     return isUserLoaded ? (
         <>
+
             <Reposted>
                 <SharePost className='repostedBold' /> <p>Re-posted by <span>you</span></p>
             </Reposted>
+
             <PostContainer data-test="post">
                 <UserContainer>
                     <UserImage
@@ -150,14 +166,15 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                         alt="userImage"
                         onClick={() => getUserPage(user.username)}
                     />
+
                     <div className="interactions">
                         <StyledHeartIcon isfilled={isFilled} onClick={handleLike} />
                         <p>
                             {likesCount} {likesCount === 1 ? 'like' : 'likes'}
                         </p>
-                        <CommentPost iscommented={isCommented} onClick={handleLike} data-test="comment-btn" />
+                        <CommentPost iscommented={isCommented} onClick={() => setShowCom(!showCom)} data-test="comment-btn" />
                         <p data-test="comment-counter" >
-                            {commentsCount} {commentsCount === 1 || commentsCount === 0 ? 'comment' : 'comments'}
+                            {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
                         </p>
                         <SharePost isshared={isShared} onClick={handleOpenRepostModal} data-test="repost-btn" />
                         <p data-test="repost-counter">
@@ -176,6 +193,7 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                             </div>
                         </Modal>
                     </div>
+
                 </UserContainer>
                 <ContentContainer>
                     <h3 data-test="username">
@@ -187,11 +205,13 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                                 data-test="edit-btn"
                             />
                             <DeletePost
+
                                 onClick={handleOpenDeleteModal}
                                 data-test="delete-btn"
                             />
 
                             <Modal
+
                                 isOpen={showDeleteModal}
                                 onRequestClose={handleCloseDeleteModal}
                                 ariaHideApp={false}
@@ -202,6 +222,7 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                                     <button className="confirmButton" data-test="confirm" onClick={() => deletePost(post)}>Yes, delete it</button>
                                 </div>
                             </Modal>
+
                         </div>
                     </h3>
                     <p>
@@ -244,9 +265,23 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                             <p>{post.description}</p>
                             <p>{post.link}</p>
                         </DataText>
+
+
                     </DataStyle>
+
+
                 </ContentContainer>
+
             </PostContainer >
+            {/* ----------------------- colocar img e username no lugar de userId  ------------*/}
+            {showCom ? (
+                <GeralCommContainer >
+                    {comments.map(c=><Comment text={c.comments}/>)}
+                    <InputComment postId={postId} userId={post.userId}/> 
+                </GeralCommContainer>
+            ) : <GeralCommAux/>}
         </>
     ) : null;
 }
+
+

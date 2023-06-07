@@ -230,7 +230,6 @@ export const PostContainer = styled.div`
   border-radius: 16px;
   padding: 15px;
   gap: 15px;
-  margin-bottom: 16px;
   max-width: 611px;
   @media (max-width: 600px) {
     width: 100%;
@@ -238,6 +237,22 @@ export const PostContainer = styled.div`
   }
 `;
 
+export const GeralCommContainer=styled.div`
+      /* margin-top: -13px ; */
+      display: flex;
+      flex-direction: column;
+      background-color: #1e1e1e;
+      margin-bottom: 44px;
+      border-bottom-right-radius:16px;
+      border-bottom-left-radius:16px;
+      padding:15px;
+      padding-top:0px ;
+      width: 611px;
+
+`;
+export const GeralCommAux=styled.div`
+      margin-bottom: 16px;
+`;
 export const UserImage = styled.img`
     width: 40px;
     height: 40px;
@@ -250,13 +265,14 @@ export const UserImage = styled.img`
       cursor: pointer;
       filter: brightness(70%);
     }
-`
+`;
 
 export const UserContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
   align-items: center;
+
     .interactions{
       align-items: center;
       justify-content: space-around;
@@ -274,6 +290,7 @@ export const UserContainer = styled.div`
     }
 
 `
+
 
 export const EditPost = styled(BsPencil)`
 font-size: 16px;

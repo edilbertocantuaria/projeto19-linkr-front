@@ -67,7 +67,9 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
   }, []);
 
   const handleForm = (e) => {
+
     console.log(e.target.value);
+
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -79,7 +81,7 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
       const userId = localStorage.getItem('userId');
       const updatedForm = { ...form, userId: userId };
       const response = await apiPosts.postLink(updatedForm);
-
+      
       setIsPublishing(false);
       setForm({ link: '', article: null });
       console.log(response.data);
