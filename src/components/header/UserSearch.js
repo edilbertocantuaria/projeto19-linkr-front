@@ -92,7 +92,6 @@ export default function UserSearch() {
       <SearchInput
         debounceTimeout={300}
         value={value}
-        isOpen={isDropdownOpen}
         onChange={handleSearchChange}
         placeholder="Search for people"
         onFocus={() => {

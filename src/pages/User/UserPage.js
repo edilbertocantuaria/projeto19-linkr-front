@@ -52,7 +52,7 @@ export default function UserPage() {
         .catch((error) => {
             console.log(error);
         });
-    }, [])
+    }, [id])
 
     return (
         <>
@@ -73,7 +73,7 @@ export default function UserPage() {
             </LoadingStyle>
           </LoadingContainer>
         ) : (
-            <Posts username={user.username} userId={id} 
+            <Posts user={user} userId={id} 
             handleFollow={handleFollow} following={following} isLoading={isLoading}
             isUser={isUser}></Posts>
         )}
