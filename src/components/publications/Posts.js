@@ -51,11 +51,12 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
       }
       await apiPosts.postLink(updatedForm);
   
-      // Buscar novamente os posts atualizados
       const response = await apiPosts.getFollowsUser(Number(localStorage.getItem("userId")), 1);
       const newPosts = response.data;
+      console.log(newPosts);
   
       setPosts(newPosts);
+      setLoadingScreen(false)
       setIsPublishing(false);
       setForm({ link: '', article: null });
       console.log(response.data);
