@@ -6,9 +6,11 @@ function postLink(body) {
     return promise;
 };
 
-function getPosts() {
+function getPosts(page) {
     const promise = axios.get(`
-    ${process.env.REACT_APP_API_URL}/timeline`);
+    ${process.env.REACT_APP_API_URL}/timeline`, {
+        params: { page },
+    });
     return promise;
 }
 
