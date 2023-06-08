@@ -41,12 +41,21 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsPublishing(true);
-
+  
     try {
       const userIdLocalStorage = localStorage.getItem("userId");
       const updatedForm = { ...form, userId: userIdLocalStorage };
-      const response = await apiPosts.postLink(updatedForm);
-
+      if (form.link === '') {
+        alert("Fill in the message with a link to send it.");
+        return setIsPublishing(false);
+      }
+      await apiPosts.postLink(updatedForm);
+  
+      // Buscar novamente os posts atualizados
+      const response = await apiPosts.getFollowsUser(Number(localStorage.getItem("userId")), 1);
+      const newPosts = response.data;
+  
+      setPosts(newPosts);
       setIsPublishing(false);
       setForm({ link: '', article: null });
       console.log(response.data);
