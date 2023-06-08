@@ -80,7 +80,7 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
         let response;
 
         if (user === undefined) {
-          response = await apiPosts.getPosts(page);
+          response = await apiPosts.getFollowsUser(Number(localStorage.getItem("userId")), page);
         } else if (user) {
           response = await apiPosts.getUserPosts(Number(userId), page);
           setPosts(response.data);

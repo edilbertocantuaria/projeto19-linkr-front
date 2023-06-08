@@ -22,14 +22,17 @@ function getUserPosts(id, page) {
     return promise;
 }
 
-function getFollowsUser(id) {
-    const promise = axios.get(`${process.env.REACT_APP_API_URL}/follow/${id}`);
+function getFollowsUser(id, page) {
+    const promise = axios.get(`${process.env.REACT_APP_API_URL}/follow/${id}`,{
+        params: { page }
+    });
     return promise;
 }
 
 
 function CountFriends(id) {
-    const promise = axios.get(`${process.env.REACT_APP_API_URL}/followers/${id}`);
+    const promise = axios.get(`${process.env.REACT_APP_API_URL}/followers/${id}` );
+   
     return promise;
 }
 
