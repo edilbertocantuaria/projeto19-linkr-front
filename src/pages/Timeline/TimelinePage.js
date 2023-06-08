@@ -1,4 +1,4 @@
-import Posts from "../../components/publications/Posts";
+import Posts from "../../components/publications/Posts.js";
 
 export default function TimelinePage() {
   return (

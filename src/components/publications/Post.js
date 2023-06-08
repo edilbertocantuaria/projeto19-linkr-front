@@ -39,7 +39,7 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
     const [showRepostModal, setShowRepostModal] = useState(false);
     const [isfilled, setIsfilled] = useState(false);
     const [issharer, setIsshared] = useState(false);
-    const [loadComments,setLoadComments]=useState(false)
+    const [loadComments, setLoadComments] = useState(false)
 
     const navigate = useNavigate();
 
@@ -100,14 +100,13 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
         }
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/comments/${postId}`)
-        .then(res => {
-            console.log(`comments post ${postId}`, res.data)
-            setComments(res.data)
-        })
-        .catch(err => console.log(err.message))
-    },[loadComments])
+            .then(res => {
+                setComments(res.data)
+            })
+            .catch(err => console.log(err.message))
+    }, [loadComments])
 
     const editingPostRef = useRef(null);
     function editPost(post) {
@@ -279,10 +278,10 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
             {/* ----------------------- colocar img e username no lugar de userId  ------------*/}
             {showCom ? (
                 <GeralCommContainer >
-                    {comments.map(c=><Comment text={c.comments} img={c.img} username={c.username}/>)}
-                    <InputComment postId={postId} userId={post.userId} loadComments={loadComments} setLoadComments={setLoadComments}/> 
+                    {comments.map(c => <Comment text={c.comments} img={c.img} username={c.username} />)}
+                    <InputComment postId={postId} userId={post.userId} loadComments={loadComments} setLoadComments={setLoadComments} />
                 </GeralCommContainer>
-            ) : <GeralCommAux/>}
+            ) : <GeralCommAux />}
         </>
     ) : null;
 }
