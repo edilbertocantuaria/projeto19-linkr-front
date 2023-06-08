@@ -24,7 +24,7 @@ export default function UserPage() {
                 setFollowing(true);
                 setIsLoading(false);
             } catch (err) {
-                console.log(err)
+                alert(err.response);
             }
         } else {
             await axios.post(`${process.env.REACT_APP_API_URL}/unfollow/${user.id}`, { followerId: idFromLocalStorage })
