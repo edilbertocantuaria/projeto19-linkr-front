@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router';
 import ButtonFollow from '../button/ButtonFollow';
 import reactStringReplace from 'react-string-replace';
 
-export default function Posts({ user, userImage, userId, handleFollow, following, isLoading }) {
+export default function Posts({ user, userId, handleFollow, following, isLoading }) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -43,8 +43,8 @@ export default function Posts({ user, userImage, userId, handleFollow, following
     setIsPublishing(true);
 
     try {
-      const userId = localStorage.getItem("userId");
-      const updatedForm = { ...form, userId: userId };
+      const userIdLocalStorage = localStorage.getItem("userId");
+      const updatedForm = { ...form, userId: userIdLocalStorage };
       const response = await apiPosts.postLink(updatedForm);
 
       setIsPublishing(false);
@@ -83,6 +83,10 @@ export default function Posts({ user, userImage, userId, handleFollow, following
           response = await apiPosts.getPosts(page);
         } else if (user) {
           response = await apiPosts.getUserPosts(Number(userId), page);
+          setPosts(response.data);
+          setHasMorePosts(false);
+          setLoadingScreen(false);
+          return setIsFetching(false);
         }
 
         if (response.data.length === 0) {
