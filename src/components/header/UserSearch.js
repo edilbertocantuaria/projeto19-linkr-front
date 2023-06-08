@@ -38,7 +38,7 @@ export default function UserSearch() {
           }
       }
       getUsers();
-  }, []);
+  }, [value]);
 
   function handleSearchChange(e) {
     e.preventDefault();
