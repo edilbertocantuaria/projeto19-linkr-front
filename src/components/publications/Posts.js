@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router';
 import ButtonFollow from '../button/ButtonFollow';
 import reactStringReplace from 'react-string-replace';
 
-export default function Posts({ username, userImage, userId, handleFollow, following, isLoading }) {
+export default function Posts({ user, userImage, userId, handleFollow, following, isLoading }) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
@@ -79,9 +79,9 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
       try {
         let response;
 
-        if (username === undefined) {
+        if (user === undefined) {
           response = await apiPosts.getPosts(page);
-        } else if (username) {
+        } else if (user) {
           response = await apiPosts.getUserPosts(Number(userId), page);
         }
 
@@ -106,7 +106,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
     };
 
     fetchPosts();
-  }, [page]);
+  }, [page, user]);
 
   const loadMorePosts = () => {
     if (!hasMorePosts || isFetching) {
@@ -123,8 +123,8 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
   return (
     <Container>
       <TimelineContainer>
-        <Title>{username ? `${username}'s posts` : "timeline"}</Title>
-        {!username && (
+        <Title>{user ? `${user.username}'s posts` : "timeline"}</Title>
+        {!user && (
           <PublishContainer data-test="publish-box">
             <img
               src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
@@ -157,7 +157,6 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
             </FormPublishContainer>
           </PublishContainer>
         )}
-        {username && <ButtonFollow handleFollow={handleFollow} following={following} isLoading={isLoading}></ButtonFollow>}
         {loadingScreen ? (
           <LoadingStyle>
             <p>Loading</p>
@@ -214,6 +213,7 @@ export default function Posts({ username, userImage, userId, handleFollow, follo
           </InfiniteScroll>
         )}
       </TimelineContainer>
+      {user && <ButtonFollow handleFollow={handleFollow} following={following} isLoading={isLoading}></ButtonFollow>}
       <HashtagsContainer data-test="trending">
         <h1>trending</h1>
         <CustomHr />
