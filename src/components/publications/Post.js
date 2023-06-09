@@ -27,7 +27,7 @@ import apiUser from '../../services/apiUser';
 import Comment from '../comment/Comment';
 import InputComment from '../comment/InputComment';
 
-export default function Post({ post, isFilled, likesCount, commentsCount, isCommented, sharesCount, isShared, handleLike, postId, TL }) {
+export default function Post({ post, isFilled, likesCount, commentsCount, isCommented, sharesCount, isShared, handleLike, postId, TL,userId }) {
     const [user, setUser] = useState(null);
     const [isUserLoaded, setIsUserLoaded] = useState(false);
     const [ableToEdit, setAbleToEdit] = useState(false)
@@ -64,6 +64,7 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
             apiUser.getUser(post.userId)
                 .then((response) => {
                     const userData = response.data.user;
+                    console.log("post user",userData)
                     setUser(userData);
                     setIsUserLoaded(true);
                 })
@@ -104,6 +105,7 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
         axios.get(`${process.env.REACT_APP_API_URL}/comments/${postId}`)
             .then(res => {
                 setComments(res.data)
+                console.log("comments",res.data)
             })
             .catch(err => console.log(err.message))
     }, [loadComments])
@@ -274,10 +276,9 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                 </ContentContainer>
 
             </PostContainer >
-            {/* ----------------------- colocar img e username no lugar de userId  ------------*/}
             {showCom ? (
-                <GeralCommContainer >
-                    {comments.map(c => <Comment text={c.comments} img={c.img} username={c.username} />)}
+                <GeralCommContainer data-test="comment-box">
+                    {comments.map(c => <Comment userId={c.userId} text={c.comments} img={c.img} username={c.username} />)}
                     <InputComment postId={postId} userId={post.userId} loadComments={loadComments} setLoadComments={setLoadComments} />
                 </GeralCommContainer>
             ) : <GeralCommAux />}

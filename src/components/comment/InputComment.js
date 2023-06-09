@@ -11,6 +11,7 @@ export default function InputComment(props) {
     }
     const img = localStorage.getItem("image");
     const username = localStorage.getItem("username");
+    const userId = localStorage.getItem("userId");
 
     function addComment() {
         console.log("postId",props.postId)
@@ -19,7 +20,8 @@ export default function InputComment(props) {
         axios.post(`${process.env.REACT_APP_API_URL}/comments/${props.postId}`, {
             "comment": text,
             "img": img,
-            "username":username
+            "username":username,
+            "userId":userId
         })
             .then(res => {
                 console.log(`comentario enviado com sucesso`)
@@ -39,11 +41,11 @@ export default function InputComment(props) {
                 style={{ backgroundImage: `url(${img})` }}
                 alt="userImage"
             />
-            <CommInput placeholder="write a comment..." onChange={e => input(e)} value={text}/>
+            <CommInput placeholder="write a comment..." onChange={e => input(e)} value={text} data-test="comment-input"/>
             <FiSend
                 size="15px"
                 color="white"
-                onClick={() => addComment()} />
+                onClick={() => addComment()} data-test="comment-submit"/>
         </Container>
     )
 }
