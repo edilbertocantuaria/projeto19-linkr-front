@@ -1,9 +1,11 @@
 import styled from "styled-components"
 
 export default function Comment(props) {
+  const userId = localStorage.getItem("userId");
+
     return (
         <>
-            <ComContainer  >
+            <ComContainer data-test="comment" >
                 <UserContainer>
                     <UserImage
                         src="https://i0.wp.com/www.multarte.com.br/wp-content/uploads/2019/01/totalmente-transparente-png-fw.png?fit=696%2C392&ssl=1"
@@ -11,7 +13,10 @@ export default function Comment(props) {
                         alt="userImage"
                     />
                     <AuxComContainer>
-                        <p>{props.username}</p>
+                      <div>
+                      <p>{props.username}</p>
+                      {userId===props.userId?<span>   post's author</span>:""}
+                      </div>
                         <span>{props.text}</span>
                     </AuxComContainer>
                 </UserContainer>
@@ -43,6 +48,9 @@ width: 100%;
   }
   span{
     color: #acacac;
+  }
+  div{
+    display: flex;
   }
 `
 const Hr = styled.hr`

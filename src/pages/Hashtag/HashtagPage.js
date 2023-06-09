@@ -31,6 +31,7 @@ export default function HashtagPage() {
     axios.get(`${process.env.REACT_APP_API_URL}/hashtag/${hashtag.trim()}`)
       .then(res => {
         setPosts(res.data)
+        console.log("POSTS",res.data)
       })
       .catch(err => console.log(err.message))
 
