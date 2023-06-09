@@ -160,7 +160,7 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
                 <textarea
                   placeholder="Awesome article about #javascript"
                   name="article"
-                  data-tescdt="description"
+                  data-test="description"
                   value={form.article || ''}
                   onChange={handleForm}
                   disabled={isPublishing}
