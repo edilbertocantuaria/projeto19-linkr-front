@@ -266,7 +266,7 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                         <DataText>
                             <p>{post.title}</p>
                             <p>{post.description}</p>
-                            <p>{post.link}</p>
+                            <a href={post.link}>{post.link}</a>
                         </DataText>
 
 
