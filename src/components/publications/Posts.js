@@ -58,7 +58,7 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
       setPosts(newPosts);
       setLoadingScreen(false)
       setIsPublishing(false);
-      setForm({ link: '', article: null });
+      setForm({ link: '', article: '' });
       console.log(response.data);
     } catch (error) {
       setIsPublishing(false);
@@ -101,6 +101,7 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
 
         if (response.data.length === 0) {
           setHasMorePosts(false);
+          setLoadingScreen(false);
           return;
         } else {
           setPosts((prevPosts) => {
