@@ -262,11 +262,11 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
                         ) : ""}
                     </p>
 
-                    <DataStyle data-test="link" onClick={handleDataStyleClick}>
+                    <DataStyle data-test="link" onClick={handleDataStyleClick} href={post.link}>
                         <DataText>
                             <p>{post.title}</p>
                             <p>{post.description}</p>
-                            <a href={post.link}>{post.link}</a>
+                            <p>{post.link}</p>
                         </DataText>
 
 
