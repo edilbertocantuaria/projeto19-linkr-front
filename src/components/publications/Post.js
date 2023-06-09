@@ -227,7 +227,7 @@ export default function Post({ post, isFilled, likesCount, commentsCount, isComm
 
                         </div>
                     </h3>
-                    <p>
+                    <p date-test="description">
                         {post.article && !(ableToEdit) ? (
                             reactStringReplace(post.article, /#(\w+)/g, (match, i) => (
                                 <span
