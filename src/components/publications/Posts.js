@@ -58,7 +58,7 @@ export default function Posts({ user, userId, handleFollow, following, isLoading
       setPosts(newPosts);
       setLoadingScreen(false)
       setIsPublishing(false);
-      setForm({ link: '', article: '' });
+      setForm({ link: '', article: "" });
       console.log(response.data);
     } catch (error) {
       setIsPublishing(false);
