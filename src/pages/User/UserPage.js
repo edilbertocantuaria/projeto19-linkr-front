@@ -34,6 +34,7 @@ export default function UserPage() {
     }
 
     useEffect(() => {
+        setFollowing(false)
         apiUser.getUser(id)
         .then((response) => {
             if (idFromLocalStorage === id) {
@@ -61,21 +62,26 @@ export default function UserPage() {
                 <LoadingStyle>
                 <p>Loading</p>
                 <ThreeDots
-                height="15"
-                width="15"
-                radius="9"
-                color="white"
-                ariaLabel="three-dots-loading"
-                wrapperStyle={{}}
-                wrapperClassName=""
-                visible={true}
+                    height="15"
+                    width="15"
+                    radius="9"
+                    color="white"
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClassName=""
+                    visible={true}
                 />
             </LoadingStyle>
           </LoadingContainer>
         ) : (
-            <Posts user={user} userId={id} 
-            handleFollow={handleFollow} following={following} isLoading={isLoading}
-            isUser={isUser}></Posts>
+            <Posts 
+                user={user} 
+                userId={id} 
+                handleFollow={handleFollow} 
+                following={following} 
+                isLoading={isLoading}
+                isUser={isUser}
+            />
         )}
         </>
     )
